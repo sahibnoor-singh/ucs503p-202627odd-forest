@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@aiden0z/pptx-renderer": "^1.2.4"
+  }
+}

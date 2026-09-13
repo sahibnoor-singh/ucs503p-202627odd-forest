@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planning v1 | FOREST</title>
+  <link rel="stylesheet" href="css/style.css">
+<link rel="icon" type="image/jpeg" href="favicon.jpg">`n</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">FOREST</a>
+    <ul class="navbar-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/presentations">Presentations</a></li>
+      <li><a href="/ai-lab">🧪 AI Lab</a></li>
+      <li><a href="/admin">Admin</a></li>
+      <li><a href="/testing">Testing</a></li>
+      <li>
+        <button onclick="toggleTheme(event)" class="theme-toggle-btn" aria-label="Toggle Theme">
+          <svg id="icon-sun" viewBox="0 0 24 24" style="display: block;"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"></path></svg>
+          <svg id="icon-moon" viewBox="0 0 24 24" style="display: none;"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4C12.92 3.04 12.46 3 12 3z"></path></svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- PLANNING HEADER -->
+  <div class="planning-header">
+    <span class="badge">Deliverable</span>
+    <h1 style="font-size: 2.5rem; margin-top: 1rem;">Planning Presentation v1</h1>
+    <div class="planning-meta">
+      <span>Version 1.0</span>
+      <span>August 2026</span>
+      <span>Sahibnoor, Yaksh, Ridhima, Jasmine</span>
+    </div>
+  </div>
+
+  <!-- SECTION: PROJECT SCOPE -->
+  <div class="planning-section">
+    <div class="card">
+      <h2>1. Project Scope & Objectives</h2>
+      <ul>
+        <li>Build a research-focused argument analysis system for political opinions.</li>
+        <li>Users post face-camera opinion videos on trending political topics.</li>
+        <li>AI classifies each video reply as FOR, AGAINST, or UNRESOLVED.</li>
+        <li>Every AI classification is linked to an exact transcript excerpt and timestamp.</li>
+        <li>Evaluate the system against baselines using F1, Precision, Recall, and Fleiss' Kappa.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: INTENDED USERS -->
+  <div class="planning-section">
+    <div class="card">
+      <h2>2. Proposed Functions & Intended Users</h2>
+      <ul>
+        <li><strong>Content Creators:</strong> Post opinion videos on trending political topics.</li>
+        <li><strong>Viewers:</strong> Navigate the visual argument graph to understand all sides of a debate.</li>
+        <li><strong>Community Moderators:</strong> Vote on UNRESOLVED classifications and report misleading content.</li>
+        <li><strong>Researchers:</strong> Access structured argument data for analysis.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: SYSTEM FEATURES -->
+  <div class="planning-section">
+    <div class="card">
+      <h2>3. System Features</h2>
+      <ul>
+        <li><strong>AI Stance Classification:</strong> Automatic FOR / AGAINST / UNRESOLVED labeling via LLM.</li>
+        <li><strong>Timestamp Traceability:</strong> Every classification cites the exact video time range.</li>
+        <li><strong>Multi-Dimensional Scoring:</strong> Fact Score, Truth Rating, Emotional Appeal, Comedy/Satire.</li>
+        <li><strong>Community Voting:</strong> Unresolved videos go to a public voting queue.</li>
+        <li><strong>Reporting & AI Moderation:</strong> Flag factless/misleading videos; AI re-verifies on threshold.</li>
+        <li><strong>Interest-Based Recommendations:</strong> AI-generated topic tags and hashtags.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: ARCHITECTURE -->
+  <div class="planning-section">
+    <div class="card">
+      <h2>4. Architecture & Tech Stack</h2>
+      <ul>
+        <li><strong>Frontend (Web):</strong> React.js with D3.js for graph visualization.</li>
+        <li><strong>Frontend (App):</strong> Flutter (Dart).</li>
+        <li><strong>Backend:</strong> Spring Boot (Java) for the main FOREST platform.</li>
+        <li><strong>Team Website Backend:</strong> Node.js + Express.</li>
+        <li><strong>Database:</strong> Neo4j (Graph DB for argument trees) + PostgreSQL (user data).</li>
+        <li><strong>Speech-to-Text:</strong> OpenAI Whisper (open-source).</li>
+        <li><strong>Stance Classification:</strong> Google Gemini API / OpenAI GPT-4o API.</li>
+        <li><strong>Fact-Checking:</strong> RAG (Retrieval-Augmented Generation) via LangChain.</li>
+        <li><strong>Deployment:</strong> Docker containers on a cloud VPS.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: EVALUATION -->
+  <div class="planning-section">
+    <div class="card">
+      <h2>5. Evaluation & Baselines</h2>
+      <ul>
+        <li><strong>Baseline 1 (Zero-Shot):</strong> Raw transcript → LLM → FOR/AGAINST classification.</li>
+        <li><strong>Baseline 2 (Summary-Only):</strong> Transcript summary → LLM → classification.</li>
+        <li><strong>FOREST Pipeline:</strong> Parent context + transcript + structured extraction.</li>
+        <li><strong>Metrics:</strong> Precision, Recall, F1-Score, Stance Accuracy, Timestamp Overlap (IoU).</li>
+        <li><strong>Human Agreement:</strong> Fleiss' Kappa across 4 annotators on 20-video pilot dataset.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: RISKS -->
+  <div class="planning-section">
+    <div class="card">
+      <h2>6. Technical Risks & Challenges</h2>
+      <ul>
+        <li><strong>Sarcasm & Ambiguity:</strong> AI may misclassify sarcastic videos. Mitigated by UNRESOLVED + community voting.</li>
+        <li><strong>API Costs:</strong> LLM API calls have per-token costs. Mitigated by using free-tier quotas and caching.</li>
+        <li><strong>Low Annotator Agreement:</strong> If humans disagree on stances, AI evaluation is unreliable. Mitigated by refining annotation guidelines.</li>
+        <li><strong>Video Quality:</strong> Poor audio quality degrades transcription. Mitigated by requiring face-camera videos with clear speech.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: GANTT CHART PLACEHOLDER -->
+  <div class="planning-section">
+    <div class="card">
+      <h2>7. Gantt Chart</h2>
+      <p style="color: var(--text-secondary);">The detailed Gantt chart with tasks, dependencies, milestones, and deadlines will be embedded here.</p>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">(To be updated with the interactive Gantt chart before the planning presentation.)</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>FOREST • Planning Presentation v1 • UCS503 Software Engineering • Thapar University • 2026-27</p>
+  </footer>
+
+  <script src="js/theme.js"></script>
+</body>
+</html>

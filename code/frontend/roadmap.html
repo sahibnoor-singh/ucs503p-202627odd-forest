@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOREST Roadmap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .highlight {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+    </style>
+<link rel="icon" type="image/jpeg" href="favicon.jpg">`n</head>
+<body>
+
+<div class="container">
+    <h1>FOREST — REVISED FUTURE PLAN & FEASIBILITY STUDY</h1>
+    
+    <div class="highlight">
+        <p><strong>Core Focus:</strong> Researching argument structure recovery from short political-opinion videos.</p>
+    </div>
+
+    <h2>System Architecture & Features</h2>
+    <ul>
+        <li><strong>Domain:</strong> Political Opinions & Current Affairs</li>
+        <li><strong>Graph Structure:</strong> Root video → Child video replies → Anyone can reply to any node</li>
+        <li><strong>AI Classification:</strong> FOR / AGAINST / UNRESOLVED (with community voting for unresolved)</li>
+        <li><strong>Per-Video Scores:</strong> Fact Score, Truth Rating, Emotional Appeal Score, Comedy/Satire Score</li>
+        <li><strong>Time Range Traceability:</strong> AI cites exact timestamp from which it concluded its result</li>
+        <li><strong>Metadata:</strong> AI-generated topic tags + hashtags (or user-provided)</li>
+    </ul>
+
+    <h2>Moderation & Community</h2>
+    <ul>
+        <li><strong>Community Reporting:</strong> Factless, Misleading, Hate Speech, Off-Topic, Deepfake</li>
+        <li><strong>AI-Assisted Report Verification:</strong> AI re-checks flagged videos, auto-removes if scores are too low</li>
+        <li><strong>Interest-Based Recommendations:</strong> Scores + topics help show users similar debate trees</li>
+    </ul>
+
+    <h2>Evaluation & Tech Stack</h2>
+    <ul>
+        <li><strong>Testing Plan:</strong> 20 self-recorded or sourced short videos, team annotates, then AI classifies, compare F1 scores</li>
+        <li><strong>Tech Stack:</strong> Whisper (transcription), Gemini/GPT-4o (classification), Neo4j (graph DB), Spring Boot + React + Flutter</li>
+    </ul>
+
+    <h2>Research Plan Summary</h2>
+    <p style="font-weight: bold; text-align: center; font-size: 1.1em; color: #e74c3c;">
+        20 Videos → Human Ground Truth → AI Argument Recovery → Timestamp-Grounded Debate Graph → Baseline Comparison → F1/Accuracy Evaluation → Human Usability Test → Full FOREST Prototype
+    </p>
+
+</div>
+
+</body>
+</html>

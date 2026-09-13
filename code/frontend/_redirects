@@ -1,0 +1,4 @@
+/api/* http://130.210.51.110:3000/api/:splat 200
+/uploads/* http://130.210.51.110:3000/uploads/:splat 200
+/* /index.html 200
+
