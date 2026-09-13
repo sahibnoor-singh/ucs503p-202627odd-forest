@@ -1,15 +1,6 @@
 # Milestone and Launch Plan
 ## Project FOREST
 
----
-
-**Course:** UCS503 — Software Engineering Lab  
-**Academic Year:** 2026–2027  
-**Institution:** Department of Computer Science & Engineering, Thapar Institute of Engineering and Technology  
-**Project Group:** Group 1 
-
----
-
 ### 1. Project Overview
 Our project development is divided into four main phases. We start with a basic website and AI testing, and eventually build a full mobile app that real students can use. We make sure each phase is fully working before moving to the next one.
 
@@ -72,3 +63,4 @@ gantt
     section Milestone 4
     Fix Bugs                    :         m4_1, 2027-02-15, 2027-02-28
     Final Presentation          :         m4_2, 2027-03-01, 2027-03-15
+```

@@ -22,7 +22,7 @@ Modern digital discourse is increasingly migrating toward short-form video forma
 
 This Feasibility Report evaluates the technical, operational, economic, legal, and schedule viability of FOREST, validated by empirical metrics from a **20-video feasibility pilot study** achieving baseline classification accuracy ($F_1 \ge 0.75$) and ground-truth reliability evaluated via **Fleiss' Kappa ($\kappa$)**.
 
-```
+```text
                        [ ROOT VIDEO ]
                              │
             ┌────────────────┴────────────────┐
@@ -43,7 +43,7 @@ This Feasibility Report evaluates the technical, operational, economic, legal, a
 Conventional comment sections flatten multi-layered debates into linear threads:
 $$\text{Video} \longrightarrow \text{Comment} \longrightarrow \text{Reply} \longrightarrow \text{Noise / Flame Wars}$$
 
-Users lose track of:
+Currently, 99% of social media feeds rely on forcefully spoon-feeding users algorithmically biased content designed to maximize outrage. This traps users in echo chambers and prevents them from making objective life decisions. In this chaos, users lose track of:
 1. The exact claim being challenged.
 2. The supporting empirical evidence.
 3. The opposing arguments and nuanced stances.
@@ -66,7 +66,7 @@ FOREST models discourse as a directed graph $G = (V, E)$, where:
 
 The technical feasibility evaluates the availability, performance, compatibility, and scalability of the proposed tech stack.
 
-```
+```text
                     ┌─────────────────────────┐
                     │   Client Web / Mobile   │
                     └────────────┬────────────┘
@@ -165,7 +165,7 @@ The project is structured across a rigorous **SDLC 10-Phase Roadmap**.
 
 ### 6.1 Roadmap & Milestone Schedule
 
-```
+```text
 Phase 1: Project Conceptualization & Ideation           [COMPLETED]
 Phase 2: Ground Truth Dataset Creation (20 Videos)     [COMPLETED]
 Phase 3: Automated Audio & Gemini AI Pipeline           [COMPLETED]

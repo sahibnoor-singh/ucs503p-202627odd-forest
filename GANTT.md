@@ -20,3 +20,4 @@ gantt
     Beta Testing               :         test1, 2026-12-01, 2027-01-15
     Final Polish & Scaling     :         dev5, 2027-01-15, 2027-02-28
     Final Project Submission   :         mil3, 2027-03-01, 2027-03-15
+```
