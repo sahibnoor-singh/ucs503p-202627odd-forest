@@ -1,0 +1,81 @@
+{
+  "_about": "Who posts which video, for scripts/seed_real.js. Every account here is a bot and is labelled BOT in the app. Files are relative to --media-dir. A debate is one root video plus the videos that reply to it (replies can have replies). Titles, descriptions, captions and the FOR/AGAINST label of each reply are NOT written here: the backend works them out from what is said in the video.",
+
+  "bots": [
+    { "username": "aman_s", "fullName": "Aman Singh", "bio": "Law student, Chandigarh. Here for the arguments.", "avatar": { "hair": "short", "skin": 2, "hairColor": 0, "shirt": 2, "bg": 2, "glasses": false } },
+    { "username": "riya_k", "fullName": "Riya Kapoor", "bio": "Journalism, 3rd year. Questions first, opinions later.", "avatar": { "hair": "long", "skin": 1, "hairColor": 1, "shirt": 6, "bg": 6, "glasses": false } },
+    { "username": "kabir_m", "fullName": "Kabir Mehta", "bio": "Economics. Numbers over noise.", "avatar": { "hair": "curly", "skin": 3, "hairColor": 0, "shirt": 0, "bg": 0, "glasses": true } },
+    { "username": "simran.v", "fullName": "Simran Verma", "bio": "Public policy. Chai and long threads.", "avatar": { "hair": "long", "skin": 1, "hairColor": 0, "shirt": 4, "bg": 4, "glasses": false } },
+    { "username": "dev.p", "fullName": "Dev Patel", "bio": "Engineering, hostel 7. Plays devil's advocate.", "avatar": { "hair": "cap", "skin": 4, "hairColor": 0, "shirt": 3, "bg": 3, "glasses": false } },
+    { "username": "priya_n", "fullName": "Priya Nair", "bio": "Sociology. Listens before replying.", "avatar": { "hair": "bun", "skin": 2, "hairColor": 0, "shirt": 5, "bg": 5, "glasses": false } },
+    { "username": "harpreet_g", "fullName": "Harpreet Gill", "bio": "Debate society. Punjab to Delhi.", "avatar": { "hair": "turban", "skin": 2, "shirt": 1, "bg": 1, "turbanColor": "#2d5fa8", "glasses": false } },
+    { "username": "ananya_r", "fullName": "Ananya Rao", "bio": "Medical student. Cares about how exams are run.", "avatar": { "hair": "long", "skin": 0, "hairColor": 2, "shirt": 7, "bg": 7, "glasses": true } },
+    { "username": "vikram_s", "fullName": "Vikram Sethi", "bio": "MBA. Sceptical by default.", "avatar": { "hair": "short", "skin": 3, "hairColor": 1, "shirt": 3, "bg": 5, "glasses": false } },
+    { "username": "meera_j", "fullName": "Meera Joshi", "bio": "History honours. Context matters.", "avatar": { "hair": "side", "skin": 2, "hairColor": 1, "shirt": 2, "bg": 0, "glasses": false } },
+    { "username": "arjun_t", "fullName": "Arjun Tiwari", "bio": "Civil services aspirant, 2nd attempt.", "avatar": { "hair": "short", "skin": 4, "hairColor": 0, "shirt": 0, "bg": 7, "glasses": true } },
+    { "username": "naina_b", "fullName": "Naina Bansal", "bio": "Design student. Posts when she is annoyed.", "avatar": { "hair": "curly", "skin": 1, "hairColor": 2, "shirt": 6, "bg": 1, "glasses": false } },
+    { "username": "ishaan_c", "fullName": "Ishaan Chopra", "bio": "Commerce. Cricket and current affairs.", "avatar": { "hair": "side", "skin": 1, "hairColor": 5, "shirt": 7, "bg": 2, "glasses": false } },
+    { "username": "tanya_k", "fullName": "Tanya Khanna", "bio": "Psychology. Both sides, then my side.", "avatar": { "hair": "bun", "skin": 0, "hairColor": 3, "shirt": 4, "bg": 6, "glasses": false } },
+    { "username": "forest_daily", "fullName": "FOREST Daily Prompt", "bio": "A bot that posts one debate prompt a day.", "avatar": { "hair": "short", "skin": 5, "hairColor": 0, "shirt": 0, "bg": 0, "glasses": false } },
+    { "username": "dev", "fullName": "Dev You", "bio": "Test account.", "avatar": { "hair": "short", "skin": 2, "hairColor": 0, "shirt": 1, "bg": 3, "glasses": false } }
+  ],
+
+  "debates": [
+    {
+      "root": { "file": "FOR11.mp4", "by": "harpreet_g" },
+      "replies": [
+        { "file": "FOR10.mp4", "by": "riya_k" },
+        { "file": "FOR4.mp4", "by": "simran.v" },
+        { "file": "FOR7.mp4", "by": "dev.p" },
+        {
+          "file": "AGAINST1.mp4", "by": "vikram_s",
+          "replies": [{ "file": "FOR8.mp4", "by": "kabir_m" }]
+        },
+        {
+          "file": "AGAINST2.mp4", "by": "arjun_t",
+          "replies": [{ "file": "FOR1.mp4", "by": "naina_b" }]
+        },
+        { "file": "AGAINST4.mp4", "by": "ishaan_c" },
+        { "file": "UNRESOLVED5.mp4", "by": "meera_j" }
+      ]
+    },
+    {
+      "root": { "file": "Testing/DauJLw1iYz6_video2.mp4", "by": "aman_s" },
+      "replies": [
+        { "file": "FOR13.mp4", "by": "priya_n" },
+        { "file": "FOR15.mp4", "by": "tanya_k" },
+        { "file": "Testing/DbLcWixvq0q_video3.mp4", "by": "ishaan_c" },
+        { "file": "FOR5.mp4", "by": "ananya_r" },
+        { "file": "FOR9.mp4", "by": "dev.p" }
+      ]
+    },
+    {
+      "root": { "file": "FOR12.mp4", "by": "riya_k" },
+      "replies": [
+        { "file": "FOR14.mp4", "by": "kabir_m" },
+        { "file": "UNRESOLVED1.mp4", "by": "harpreet_g" },
+        { "file": "UNRESOLVED3.mp4", "by": "vikram_s" }
+      ]
+    },
+    {
+      "root": { "file": "Testing/Daz9W5OTM05_video0.mp4", "by": "simran.v" },
+      "replies": [
+        { "file": "FOR16.mp4", "by": "arjun_t" },
+        { "file": "FOR2.mp4", "by": "naina_b" },
+        { "file": "UNRESOLVED2.mp4", "by": "aman_s" },
+        { "file": "AGAINST3.mp4", "by": "meera_j" }
+      ]
+    },
+    {
+      "root": { "file": "FOR3.mp4", "by": "kabir_m" },
+      "replies": [
+        { "file": "UNRESOLVED4.mp4", "by": "tanya_k" },
+        { "file": "FOR6.mp4", "by": "priya_n" }
+      ]
+    },
+    {
+      "root": { "file": "Testing/DZPBIUWzWrP_video1.mp4", "by": "ananya_r" },
+      "replies": []
+    }
+  ]
+}

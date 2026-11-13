@@ -1,0 +1,57 @@
+# The whole server on one machine: the API, and Caddy in front of it for HTTPS (a free certificate, renewed by itself).
+#
+#   cd deploy
+#   cp api.env.example api.env       # fill it in (see docs/DEPLOY.md), then:  docker compose run --rm api node scripts/preflight.js
+#   cp .env.example .env             # DOMAIN=api.yourdomain.com  (its DNS must already point at this machine)
+#   docker compose up -d --build
+#
+# Data lives in ./data next to this file (the database and the videos): back that folder up (deploy/backup_to_s3.sh).
+
+name: forest
+
+services:
+  api:
+    build: ../app/backend
+    restart: unless-stopped
+    env_file: api.env
+    environment:
+      # Behind Caddy, so the real visitor address comes from the proxy header.
+      TRUST_PROXY: "1"
+    volumes:
+      - ./data:/data
+    expose:
+      - "3000"
+    # One process only: the database is held in memory and written to one file, so two copies would overwrite each other.
+    deploy:
+      replicas: 1
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"   # the access log rotates by itself: 3 files of 20 MB
+        max-file: "3"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in deploy/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data      # the certificates: keep this volume or Let's Encrypt is asked again on every start
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:

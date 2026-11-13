@@ -1,0 +1,11 @@
+node_modules/
+.env
+data/
+uploads/*
+!uploads/.gitkeep
+
+# shared dev snapshot (npm run snapshot:save / snapshot:load) - committed on purpose
+!snapshot/
+!snapshot/forest-app.db
+!snapshot/uploads/
+!snapshot/uploads/*

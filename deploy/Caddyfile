@@ -1,0 +1,21 @@
+# HTTPS in front of the API. Caddy gets and renews a free Let's Encrypt certificate for {$DOMAIN} on its own.
+# Needs: DOMAIN's DNS A record pointing at this machine, and ports 80 and 443 open.
+
+{$DOMAIN} {
+	# Largest upload the app allows is 50 MB (a video); leave room for the form around it.
+	request_body {
+		max_size 60MB
+	}
+
+	# Video files are already compressed: only compress text answers.
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+
+	# Range requests (seeking inside a video) pass straight through to the API.
+	reverse_proxy api:3000
+}

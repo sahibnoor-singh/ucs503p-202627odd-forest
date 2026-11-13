@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FOREST app — live data</title>
+  <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+  <style>
+    :root { --bg:#0e0f11; --card:#181a1d; --line:#2a2d32; --text:#f2f3f5; --mute:#9aa0a8; }
+    @media (prefers-color-scheme: light) { :root { --bg:#f6f7f8; --card:#fff; --line:#e1e3e6; --text:#14161a; --mute:#5d636b; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 system-ui, sans-serif; }
+    main { max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+    h1 { font-size:22px; margin:0 0 4px; }
+    .sub { color:var(--mute); margin:0 0 20px; }
+    .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:16px; }
+    .tile { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+    .tile b { display:block; font-size:26px; font-variant-numeric:tabular-nums; }
+    .tile span { color:var(--mute); font-size:13px; }
+    #graph { height:520px; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+    .legend { display:flex; flex-wrap:wrap; gap:14px; margin:12px 0; color:var(--mute); font-size:13px; }
+    .legend i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; }
+    #note { color:var(--mute); font-size:13px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>FOREST app — live data</h1>
+  <p class="sub">A read-only picture of the app's own database. The app sends this here; this site never sends anything back. Anonymous: no names, numbers or e-mails.</p>
+  <div class="tiles" id="tiles"></div>
+  <div class="legend">
+    <span><i style="background:#eab308"></i>Opinion</span>
+    <span><i style="background:#10b981"></i>FOR reply</span>
+    <span><i style="background:#ef4444"></i>AGAINST reply</span>
+    <span><i style="background:#a855f7"></i>Unresolved</span>
+    <span>square = text reply, dot = video reply</span>
+  </div>
+  <div id="graph"></div>
+  <p id="note">Loading…</p>
+</main>
+<script>
+  const LABELS = [
+    ['users', 'People'], ['opinions', 'Opinion videos'], ['videoReplies', 'Video replies'], ['textReplies', 'Text replies'],
+    ['forReplies', 'FOR'], ['againstReplies', 'AGAINST'], ['likes', 'Likes'], ['views', 'Views'], ['follows', 'Follows'], ['bots', 'Bot accounts']
+  ];
+  let network = null;
+
+  function renderTiles(stats) {
+    const wrap = document.getElementById('tiles');
+    wrap.replaceChildren(...LABELS.map(([key, label]) => {
+      const tile = document.createElement('div'); tile.className = 'tile';
+      const b = document.createElement('b'); b.textContent = String(stats[key] ?? 0);
+      const s = document.createElement('span'); s.textContent = label;
+      tile.append(b, s);
+      return tile;
+    }));
+  }
+
+  async function refresh() {
+    const note = document.getElementById('note');
+    try {
+      const res = await fetch('/api/app-sync/graph', { cache: 'no-store' });
+      const data = await res.json();
+      if (data.empty) { note.textContent = 'The app has not sent any data yet. Run the app backend with website sync turned on.'; return; }
+      renderTiles(data.stats);
+      const ds = { nodes: new vis.DataSet(data.nodes), edges: new vis.DataSet(data.edges) };
+      if (!network) {
+        network = new vis.Network(document.getElementById('graph'), ds, {
+          nodes: { size: 9, font: { color: '#9aa0a8', size: 11 }, borderWidth: 0 },
+          edges: { color: { color: '#6b7280' }, smooth: { type: 'continuous' }, width: 1 },
+          physics: { stabilization: { iterations: 150 }, barnesHut: { gravitationalConstant: -3000 } },
+          interaction: { hover: true }
+        });
+      } else {
+        network.setData(ds);
+      }
+      note.textContent = 'Last update from the app: ' + new Date(data.receivedAt).toLocaleString();
+    } catch (e) {
+      note.textContent = 'Could not load the data right now.';
+    }
+  }
+  refresh();
+  setInterval(refresh, 30000);
+</script>
+</body>
+</html>

@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FOREST Product Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout concept: a working document. Sticky contents rail on the left, one reading column, wide blocks (diagrams, tables, cards) that break out of it.
+   Color: cool paper, forest-green ink accent, four status colours that mean something (built / partial / next / later). */
+:root {
+  --bg: #f2f5f3;
+  --surface: #ffffff;
+  --ink: #15211b;
+  --ink2: #4b5b53;
+  --line: #d3dcd7;
+  --accent: #1d6b49;
+  --accent-soft: #e0efe7;
+  --built: #1d7a4b;
+  --partial: #a8680f;
+  --next: #2764b0;
+  --later: #67766e;
+  --cut: #b13b3b;
+  --built-bg: #dff1e6;
+  --partial-bg: #f8ead2;
+  --next-bg: #dde9f8;
+  --later-bg: #e6ebe8;
+  --cut-bg: #f6dede;
+  --shadow: 0 1px 0 rgba(20, 40, 30, .05);
+  --display: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1511; --surface: #16201a; --ink: #e5eee8; --ink2: #9bafa3; --line: #28372f;
+    --accent: #5ec49b; --accent-soft: #19281f;
+    --built: #62c490; --partial: #e0a64a; --next: #7fb0f0; --later: #93a49b; --cut: #ea8585;
+    --built-bg: #173323; --partial-bg: #382b12; --next-bg: #172a45; --later-bg: #222d27; --cut-bg: #3a1c1c;
+    --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1511; --surface: #16201a; --ink: #e5eee8; --ink2: #9bafa3; --line: #28372f;
+  --accent: #5ec49b; --accent-soft: #19281f;
+  --built: #62c490; --partial: #e0a64a; --next: #7fb0f0; --later: #93a49b; --cut: #ea8585;
+  --built-bg: #173323; --partial-bg: #382b12; --next-bg: #172a45; --later-bg: #222d27; --cut-bg: #3a1c1c;
+  --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.62;
+  padding-block: 0 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+h1, h2, h3, h4 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+h2 { font-size: clamp(1.7rem, 3.2vw, 2.3rem); font-weight: 800; }
+h3 { font-size: 1.28rem; font-weight: 700; }
+h4 { font-size: 1.02rem; font-weight: 700; }
+p { margin: 0 0 1em; max-width: 68ch; }
+ul, ol { margin: 0 0 1em; padding-left: 1.2em; max-width: 68ch; }
+li { margin: .25em 0; }
+code, .mono { font-family: var(--mono); font-size: .86em; }
+.label { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: var(--ink2); }
+
+.shell { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 56px; }
+.toc { position: sticky; top: 24px; align-self: start; padding-top: 56px; font-family: var(--display); font-size: .92rem; max-height: 100vh; overflow-y: auto; }
+.toc strong { display: block; margin-bottom: 10px; }
+.toc a { display: block; color: var(--ink2); text-decoration: none; padding: 5px 0 5px 12px; border-left: 2px solid var(--line); }
+.toc a:hover, .toc a.on { color: var(--ink); border-left-color: var(--accent); }
+main { min-width: 0; padding-top: 56px; }
+section { padding-top: 64px; }
+section > .label { display: block; margin-bottom: 10px; }
+section > h2 { margin-bottom: 18px; }
+.lede { font-size: 1.16rem; color: var(--ink); }
+.muted { color: var(--ink2); }
+
+header.top { padding-bottom: 8px; }
+header.top h1 { font-size: clamp(2.3rem, 6vw, 3.9rem); font-weight: 800; letter-spacing: -.025em; }
+header.top .sub { font-family: var(--display); font-size: 1.15rem; color: var(--ink2); margin-top: 14px; max-width: 46ch; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 22px; }
+
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px; box-shadow: var(--shadow); }
+.box.accent { border-color: var(--accent); background: var(--accent-soft); }
+.box h3, .box h4 { margin-bottom: 8px; }
+.box > :last-child { margin-bottom: 0; }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.grid.two { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+.stack { display: grid; gap: 16px; }
+
+.pill { display: inline-block; font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 99px; white-space: nowrap; font-weight: 600; }
+.pill.built { color: var(--built); background: var(--built-bg); }
+.pill.partial { color: var(--partial); background: var(--partial-bg); }
+.pill.next { color: var(--next); background: var(--next-bg); }
+.pill.later { color: var(--later); background: var(--later-bg); }
+.pill.cut { color: var(--cut); background: var(--cut-bg); }
+.pill.plain { color: var(--ink2); background: var(--later-bg); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-family: var(--display); font-size: .92rem; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink2); background: var(--bg); position: sticky; top: 0; }
+tr:last-child td { border-bottom: 0; }
+td ul { padding-left: 1.1em; margin: 0; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+td.wrapfirst:first-child { white-space: normal; }
+
+/* personas */
+.persona { display: grid; gap: 12px; align-content: start; }
+.persona .head { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.persona .head .age { font-family: var(--mono); font-size: .78rem; color: var(--ink2); }
+.persona blockquote { margin: 0; padding: 12px 16px; border-left: 3px solid var(--accent); background: var(--accent-soft); font-style: italic; border-radius: 0 8px 8px 0; font-size: .98rem; line-height: 1.55; }
+.persona dl { margin: 0; display: grid; gap: 8px; font-family: var(--display); font-size: .9rem; line-height: 1.45; }
+.persona dt { font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink2); }
+.persona dd { margin: 0; }
+.persona.warn { border-color: var(--cut); }
+
+/* diagrams */
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px 12px; }
+.diagram h3 { margin-bottom: 4px; }
+.diagram .cap { font-family: var(--display); font-size: .88rem; color: var(--ink2); margin-bottom: 10px; max-width: 70ch; }
+.diagram .scroll { overflow-x: auto; }
+.diagram svg { display: block; min-width: 760px; width: 100%; height: auto; }
+.diagram svg .boundary { fill: none; stroke: var(--line); stroke-width: 1.5; }
+.diagram svg .btitle { fill: var(--ink2); font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.diagram svg .uc { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
+.diagram svg .uc.planned { stroke-dasharray: 5 4; stroke: var(--next); }
+.diagram svg .uc.external { stroke: var(--later); }
+.diagram svg .uct { fill: var(--ink); font-family: var(--display); font-size: 12px; text-anchor: middle; }
+.diagram svg .link { stroke: var(--ink2); stroke-width: 1.1; fill: none; }
+.diagram svg .rel { stroke: var(--ink2); stroke-width: 1.1; stroke-dasharray: 4 3; fill: none; }
+.diagram svg .relt { fill: var(--ink2); font-family: var(--mono); font-size: 10px; text-anchor: middle; }
+.diagram svg .actor { stroke: var(--ink); stroke-width: 1.6; fill: none; }
+.diagram svg .actort { fill: var(--ink); font-family: var(--display); font-size: 12px; font-weight: 700; text-anchor: middle; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--display); font-size: .82rem; color: var(--ink2); margin-top: 6px; }
+.legend i { display: inline-block; width: 22px; height: 12px; border: 1.5px solid var(--accent); border-radius: 50%; vertical-align: -2px; margin-right: 6px; }
+.legend i.p { border-style: dashed; border-color: var(--next); }
+
+/* story cards */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 6px; align-items: center; }
+.filters .label { margin-right: 4px; }
+.chip { font-family: var(--display); font-size: .84rem; font-weight: 600; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+select { font-family: var(--display); font-size: .86rem; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.count { font-family: var(--mono); font-size: .78rem; color: var(--ink2); margin: 4px 0 14px; }
+.story { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; font-family: var(--display); font-size: .9rem; line-height: 1.48; }
+.story .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.story .id { font-family: var(--mono); font-weight: 600; font-size: .78rem; }
+.story .prio { margin-left: auto; font-family: var(--mono); font-size: .7rem; color: var(--ink2); }
+.story p { margin: 0; max-width: none; }
+.story b { font-weight: 700; }
+.story ul { margin: 0; padding-left: 1.1em; color: var(--ink2); font-size: .84rem; }
+.story .who { font-family: var(--mono); font-size: .7rem; color: var(--ink2); margin-top: auto; }
+
+/* idea cards */
+.idea { display: grid; gap: 8px; align-content: start; font-family: var(--display); font-size: .92rem; line-height: 1.5; }
+.idea .n { font-family: var(--mono); font-size: .74rem; color: var(--accent); font-weight: 600; }
+.idea h4 { margin: 0; }
+.idea p { margin: 0; max-width: none; }
+.idea .facts { display: flex; flex-wrap: wrap; gap: 6px; }
+.callout { border-left: 4px solid var(--partial); background: var(--partial-bg); padding: 14px 18px; border-radius: 0 8px 8px 0; font-family: var(--display); font-size: .95rem; max-width: 76ch; }
+.callout.red { border-left-color: var(--cut); background: var(--cut-bg); }
+.callout p { margin: 0 0 .5em; max-width: none; }
+.callout > :last-child { margin-bottom: 0; }
+.timeline { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.timeline .box { font-family: var(--display); font-size: .92rem; line-height: 1.5; }
+.timeline .box .label { display: block; margin-bottom: 6px; color: var(--accent); }
+footer { margin-top: 80px; padding-top: 20px; border-top: 1px solid var(--line); font-family: var(--display); font-size: .85rem; color: var(--ink2); max-width: 70ch; }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .toc { position: static; max-height: none; padding-top: 28px; display: flex; gap: 6px 14px; flex-wrap: wrap; overflow: visible; }
+  .toc strong { width: 100%; margin-bottom: 2px; }
+  .toc a { border-left: 0; padding: 2px 0; text-decoration: underline; }
+  main { padding-top: 28px; }
+  body { font-size: 16.5px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<div class="shell">
+<nav class="toc" aria-label="Contents">
+  <strong>Contents</strong>
+  <a href="#summary">Summary</a>
+  <a href="#state">Where we are</a>
+  <a href="#environment">The environment problem</a>
+  <a href="#personas">Who it is for</a>
+  <a href="#usecases">Use-case diagrams</a>
+  <a href="#stories">User story cards</a>
+  <a href="#audit">Feature audit</a>
+  <a href="#playbook">Breaking the environment</a>
+  <a href="#roadmap">What to build next</a>
+  <a href="#risks">Risks</a>
+  <a href="#validate">Validate first</a>
+  <a href="#decisions">Decisions for you two</a>
+</nav>
+
+<main>
+<header class="top">
+  <span class="label">Prepared 20 Oct 2026 for Sahibnoor and Yaksh</span>
+  <h1>FOREST Product Report</h1>
+  <p class="sub">What to build next, who we are building for, what to cut, and how to get a debate app past the empty-room problem.</p>
+  <div class="meta">
+    <span class="pill built">Built</span><span class="pill partial">Partial</span><span class="pill next">Next</span><span class="pill later">Later</span><span class="pill cut">Cut or defer</span>
+  </div>
+</header>
+
+<section id="summary">
+  <span class="label">Read this first</span>
+  <h2>The product works. The people are the problem.</h2>
+  <p class="lede">The loop is complete: record or write a reply, the server renders it, Gemini transcribes it, labels FOR or AGAINST and scores its claims, and people browse a ranked grid, swipe between sides, search, follow, send each other videos and react. More than 650 automated tests pass across the app and the server. What is missing is not another feature. It is a room with enough people in it that every reply gets an answer.</p>
+
+  <div class="grid two" style="margin-top:22px">
+    <div class="box accent">
+      <h3>The main risk</h3>
+      <p>A debate product needs a second person for every post. With 10 to 15 users most replies will go unanswered, and an unanswered video feels like shouting into a void. People leave after one or two such experiences. Almost every other risk is smaller than this one.</p>
+    </div>
+    <div class="box">
+      <h3>What I recommend</h3>
+      <p>Stop adding surface area. Pick one campus and one recurring use, make sure every new post gets an answer within hours, and fix the three things that stop people reaching each other: notifications, public links, and onboarding.</p>
+    </div>
+  </div>
+
+  <h3 style="margin:34px 0 12px">The next seven things, in order</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th>Build</th><th>Why it comes first</th><th>Size</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="wrapfirst">Push notifications (reply, reaction, new side)</td><td>Replies are the whole retention loop, and today nobody is told they got one. There are no notifications in the app at all.</td><td><span class="pill plain">M</span></td></tr>
+      <tr><td>2</td><td class="wrapfirst">Public web page for a debate, with a link preview</td><td>Share links today (<code>forest.app/p/…</code>) open nothing. WhatsApp is how a campus spreads anything, and a link that works without installing is the cheapest growth loop we have.</td><td><span class="pill plain">M</span></td></tr>
+      <tr><td>3</td><td class="wrapfirst">Onboarding: pick topics, follow five, answer one prompt</td><td>A new account lands on an empty Home. The first session decides whether they come back.</td><td><span class="pill plain">M</span></td></tr>
+      <tr><td>4</td><td class="wrapfirst">Daily prompt and "reply wanted" queue</td><td>Gives everyone something to answer, and makes sure new people get their first reply. Content supply and retention in one feature.</td><td><span class="pill plain">S</span></td></tr>
+      <tr><td>5</td><td class="wrapfirst">Profile page (your friend is on it) with a private debate record</td><td>The Account tab is still a placeholder. The record is what makes the credibility score matter to a person.</td><td><span class="pill plain">M</span></td></tr>
+      <tr><td>6</td><td class="wrapfirst">Motion rooms for societies and classes</td><td>One debate society can bring 50 to 100 people in one evening. This is the best seeding lever we have not built yet.</td><td><span class="pill plain">M</span></td></tr>
+      <tr><td>7</td><td class="wrapfirst">Analytics events, real-phone performance numbers, Play internal testing</td><td>We cannot tell whether anything works without measuring it. Phone speed and processing time per video are still unmeasured.</td><td><span class="pill plain">S</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout" style="margin-top:26px">
+    <p><b>How much to trust this report.</b> The personas and stories are reasoned from the product and the repository, not from interviews. They are good hypotheses and a bad substitute for talking to ten real people, which is the first thing to do (see "Validate first"). The proposal says a "massive majority" of users are tired of echo chambers, but nothing in the repo shows where that figure comes from. Treat it as unverified until it has a source.</p>
+  </div>
+</section>
+
+<section id="state">
+  <span class="label">1 · Inventory</span>
+  <h2>Where the product stands today</h2>
+  <p>Checked against the code, not the plan. "Missing" means a person would expect it and it is not there.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Area</th><th>Works today</th><th>Partial or missing</th></tr></thead>
+    <tbody>
+      <tr><td>Accounts</td><td><ul><li>E-mailed one-time-code sign-up (free), username and password</li><li>18+ age gate, account deletion that wipes personal data</li></ul></td><td><ul><li>Profile page and editing (in progress, your friend)</li><li>College or student verification</li></ul></td></tr>
+      <tr><td>Posting</td><td><ul><li>Record or upload a video reply, or a short text reply</li><li>Editor for video, text and photo posts: trim, crop, text on picture, music, cover frame, Hindi, Punjabi and emoji text</li></ul></td><td><ul><li>Voice-only posts</li><li>Drafts</li><li>A prompt to answer</li></ul></td></tr>
+      <tr><td>Understanding</td><td><ul><li>Transcript, language detection, subtitles in several languages</li><li>FOR / AGAINST / UNRESOLVED, claims with a credibility %, auto title and description</li></ul></td><td><ul><li>A credibility score per person, ranks and streaks</li><li>Sources shown under each claim</li><li>A way to contest an AI verdict</li></ul></td></tr>
+      <tr><td>Watching</td><td><ul><li>Home feed of people you follow; Discover grid ranked for you with friends' taste and a share of exploration</li><li>Full-screen reels with FOR and AGAINST swipe, debate tree, search, watch history</li></ul></td><td><ul><li>Saved debates, topic channels</li><li>"You're caught up" and time-well-spent controls</li></ul></td></tr>
+      <tr><td>Social</td><td><ul><li>Follow, block, report, who-to-follow suggestions</li><li>Send a video to a friend, emoji reactions, inbox with unread marks (videos and reactions only, no text)</li></ul></td><td><ul><li>Notifications of any kind</li><li>Invites and referrals</li><li>Groups or campus spaces</li></ul></td></tr>
+      <tr><td>Safety</td><td><ul><li>Report and block on every post, word blocklist, strikes and suspension, a back office to hide and restore posts, a grievance contact</li></ul></td><td><ul><li>Appeals</li><li>Screening for hate or threats beyond a word list</li><li>A written trust and safety playbook</li></ul></td></tr>
+      <tr><td>Growth</td><td>Copy-link only.</td><td><ul><li>A page behind the share link</li><li>Any invite or referral loop</li></ul></td></tr>
+      <tr><td>Platform</td><td><ul><li>Android app, Node and SQLite server, Gemini, ffmpeg rendering</li><li>Server tests, an integration test, perf notes for the server</li></ul></td><td><ul><li>iOS, Postgres and graph database, push service, object storage and CDN, monitoring</li><li>Real-phone speed numbers (the test driver could not connect to the phone this week)</li><li>Time to process one video, and what each costs in Gemini calls</li></ul></td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="margin-top:14px">One thing to know about the Home screen: the row of rings at the top looks like Instagram stories, but there are no stories behind it. Tapping "Your story" says it is not built. A placeholder that looks real is worse than nothing; see the feature audit.</p>
+</section>
+
+<section id="environment">
+  <span class="label">2 · The thing that kills social apps</span>
+  <h2>The environment problem, in three parts</h2>
+  <p class="lede">When people say a social app fails because of its environment, they usually mean one of three different things. They need different fixes, so it helps to keep them apart.</p>
+  <div class="grid">
+    <div class="box"><h3>The room is empty</h3><p>Not enough people, so nothing new appears and nobody answers. This is the cold-start problem, and it is the one that ends most new apps.</p></div>
+    <div class="box"><h3>The room is hostile</h3><p>Enough people, but the tone is bad. Comments turn into fights, newcomers are mocked, and the thoughtful people leave first.</p></div>
+    <div class="box"><h3>The room does not fit life</h3><p>People mean to use it but never form the habit. No reason to open it today, so the tenth open never comes.</p></div>
+  </div>
+
+  <h3 style="margin:34px 0 10px">Why FOREST is more exposed than most</h3>
+  <ul>
+    <li><b>Every reply needs a second person.</b> A photo app is useful with zero followers. A debate is not.</li>
+    <li><b>The effort is high.</b> A video reply costs far more than a like, so people post less, so there is less to answer.</li>
+    <li><b>The topics are risky.</b> Politics under your real phone number, in front of classmates, makes quiet people stay quiet.</li>
+    <li><b>The best feature needs both sides.</b> The FOR and AGAINST swipe only shows its value once a debate has people on each side.</li>
+  </ul>
+
+  <h3 style="margin:30px 0 10px">What worked for others, and what to copy</h3>
+  <p>These are widely reported stories, told here only for the lesson in each. Check the details before quoting any of them outside the team.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Product</th><th>What it did</th><th>The lesson for FOREST</th></tr></thead>
+    <tbody>
+      <tr><td>Facebook</td><td>Opened one university at a time before opening to everyone.</td><td class="wrapfirst">A small dense network feels alive. A large thin one feels dead. Finish one campus before the next.</td></tr>
+      <tr><td>Instagram</td><td>Launched as one thing, photos with filters, that was worth using alone.</td><td class="wrapfirst">Give people a reason to use the product before anyone else is there. For us that is the editor and the AI labelling of your own take.</td></tr>
+      <tr><td>Tinder, BeReal</td><td>Grew through campus groups and ambassadors, one cohort at a time.</td><td class="wrapfirst">Societies and classes are a distribution channel, not just users.</td></tr>
+      <tr><td>Clubhouse</td><td>Invite-only scarcity created a rush, then faded.</td><td class="wrapfirst">Scarcity gets the first visit. Only a reason to come back keeps people. Plan the habit, not just the launch.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="personas">
+  <span class="label">3 · Points of view</span>
+  <h2>Who it is for, in their own words</h2>
+  <p>Each card is a composite, written to show what that person would want from FOREST and what would make them leave. The quotes are invented to carry the point of view, not recorded from anyone.</p>
+
+  <div class="grid two">
+    <article class="box persona">
+      <div class="head"><h3>Aarav</h3><span class="age">19 · second-year engineering student</span><span class="pill built">Core user</span></div>
+      <blockquote>"Six WhatsApp groups and every political thing I see is a meme or a fight. I would argue properly if I knew someone would answer and nobody would screenshot me."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>A reply within hours, a small audience of his own campus, a cheap way to start (text first, video later).</dd></div>
+        <div><dt>Leaves if</dt><dd>Nobody answers in a day. It feels like homework. His hostel sees him as "the political guy".</dd></div>
+        <div><dt>What it means for us</dt><dd>Campus circles, a first-reply guarantee, notifications, a text reply that is as respected as a video.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona">
+      <div class="head"><h3>Simran</h3><span class="age">21 · final year, placement season</span></div>
+      <blockquote>"I have twenty minutes between aptitude rounds. Something that sharpens how I argue for group discussions would be worth the time. Proof I can think under pressure would be better."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>Group-discussion and interview topics, short practice, feedback on her argument, a record she can show.</dd></div>
+        <div><dt>Leaves if</dt><dd>It wastes time or looks unprofessional next to her other profiles.</dd></div>
+        <div><dt>What it means for us</dt><dd>Topic packs for placements, a private debate record she chooses to share, a time-boxed session.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona">
+      <div class="head"><h3>Rohan</h3><span class="age">24 · graduate, looking for work</span></div>
+      <blockquote>"Eight months of applications. The evenings are long and I am tired of scrolling things that make me angry and change nothing. I know policy and exams better than half the anchors. I would like to be heard, and to have something to show."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>A routine, being heard, recognition that is earned, maybe a little income through the creator programme.</dd></div>
+        <div><dt>Leaves if</dt><dd>No one responds. The score feels arbitrary. He ends up feeling worse after each session.</dd></div>
+        <div><dt>What it means for us</dt><dd>A daily prompt as routine, a credibility record that works like a portfolio, low-data mode, encouragement instead of a leaderboard that punishes. Payouts only gated on credibility, never on raw views.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona">
+      <div class="head"><h3>Harpreet</h3><span class="age">20 · Punjabi and Hindi speaker, small town</span></div>
+      <blockquote>"My best argument is in Punjabi. Apps that only work in English tell me my opinion does not count. And my data is finished by evening."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>To post in his language and be understood, to watch without burning data.</dd></div>
+        <div><dt>Leaves if</dt><dd>The screen is all English, or a video buffers on a weak signal.</dd></div>
+        <div><dt>What it means for us</dt><dd>Subtitles already help. Add Hindi and Punjabi in the app itself, a data-saver mode, shorter default video length and caching.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona">
+      <div class="head"><h3>Meera</h3><span class="age">22 · debate and MUN society lead</span><span class="pill next">Seeding lever</span></div>
+      <blockquote>"My society has 80 members and one big event a year. If the app lets me run a motion online and see the best arguments, I will bring everyone."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>Create a motion, share one join link, set a window, see the strongest arguments on each side.</dd></div>
+        <div><dt>Leaves if</dt><dd>She cannot control who joins, or the result is a wall of noise.</dd></div>
+        <div><dt>What it means for us</dt><dd>Motion rooms. One organiser brings dozens of people at once, which solves the empty room faster than anything else on this list.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona">
+      <div class="head"><h3>Kabir</h3><span class="age">28 · working professional, mostly a reader</span></div>
+      <blockquote>"I read more than I post. I want the two best arguments on a topic in three minutes, with sources, instead of four hundred comments."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>A short "both sides" view, evidence, saved debates, a weekly digest. A way to react without writing anything.</dd></div>
+        <div><dt>Leaves if</dt><dd>Trolls, clutter, or being pushed to post.</dd></div>
+        <div><dt>What it means for us</dt><dd>Lurkers are most of any audience. Reactions, saves and a digest are for them. They also make debates look busy.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona">
+      <div class="head"><h3>Dr. Verma</h3><span class="age">45 · lecturer and part-time fact-checker</span></div>
+      <blockquote>"I would use it to watch how a claim spreads and how people answer it. I need to export a debate and cite it."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>Evidence links, a clear explanation of the score, export or embed of a debate tree.</dd></div>
+        <div><dt>Leaves if</dt><dd>The AI verdicts are a black box she cannot defend to students.</dd></div>
+        <div><dt>What it means for us</dt><dd>Show sources and reasoning, allow contesting a verdict. Teachers who assign a debate bring whole classes, so this is also a channel.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona warn">
+      <div class="head"><h3>Ananya</h3><span class="age">17 · Class 12, turning 18 before the next election</span><span class="pill cut">Out of scope today</span></div>
+      <blockquote>"Teachers tell us to think for ourselves. I cannot find anywhere that shows both sides without shouting."</blockquote>
+      <dl>
+        <div><dt>The catch</dt><dd>The app is 18+ by decision. India's data protection law treats everyone under 18 as a child who needs verifiable parental consent, and limits tracking and targeted content for them. We have no consent flow.</dd></div>
+        <div><dt>What it means for us</dt><dd>Do not build for school students now. Do design for the first-time voter at 18, who is the same person a year later. A school mode through institutions is a later project and needs legal advice first.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona">
+      <div class="head"><h3>The two of you</h3><span class="age">founders and moderators</span></div>
+      <blockquote>"I need to know who is active, what got reported, what Gemini cost today, and to remove a bad post in one tap."</blockquote>
+      <dl>
+        <div><dt>Wants</dt><dd>Daily active people, posts answered within 24 hours, report queue age, cost per video.</dd></div>
+        <div><dt>What it means for us</dt><dd>A one-page founders' dashboard and a better back office. Without numbers every decision in this report is a guess.</dd></div>
+      </dl>
+    </article>
+
+    <article class="box persona warn">
+      <div class="head"><h3>Vikram</h3><span class="age">23 · the provocateur (design against him)</span><span class="pill cut">Anti-persona</span></div>
+      <blockquote>"I am here for reactions. The angrier the better."</blockquote>
+      <dl>
+        <div><dt>The risk</dt><dd>One person like this, or a group acting together, can make the room hostile for everyone else.</dd></div>
+        <div><dt>What it means for us</dt><dd>Friction for brand-new accounts, rate limits, visibility weighted by credibility, a fast report-to-hidden loop, strikes (already built), friends-only messaging with no free text (already built), and bot accounts that are always labelled.</dd></div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<section id="usecases">
+  <span class="label">4 · Use-case diagrams</span>
+  <h2>Who does what with the system</h2>
+  <p>Actors stand outside the box, use cases sit inside it. A solid outline is built. A dashed blue outline is planned and not built yet, so the diagrams also show the gaps. Scroll sideways on a phone.</p>
+  <div class="legend"><span><i></i>built</span><span><i class="p"></i>planned</span><span>dashed line = include or extend</span></div>
+  <div class="stack" id="diagrams" style="margin-top:16px"></div>
+</section>
+
+<section id="stories">
+  <span class="label">5 · User story cards</span>
+  <h2>What people need, one card each</h2>
+  <p>Each card says who wants what and why, how we will know it is done, how important it is (M must, S should, C could) and where it stands today. Filter by status or area.</p>
+  <div class="filters" role="group" aria-label="Filter by status" id="statusFilters"></div>
+  <div class="filters"><span class="label">Area</span><select id="epicFilter" aria-label="Filter by area"></select></div>
+  <div class="count" id="storyCount"></div>
+  <div class="grid" id="storyGrid"></div>
+</section>
+
+<section id="audit">
+  <span class="label">6 · Feature audit</span>
+  <h2>Keep, fix, add, cut</h2>
+  <p>One test for every feature: does it help a reply get answered? If not, it can wait.</p>
+
+  <h3 style="margin:26px 0 10px">Keep and protect</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Feature</th><th>Why it stays</th></tr></thead>
+    <tbody>
+      <tr><td>Debate tree and FOR / AGAINST swipe</td><td>This is the idea. Nothing else in the market does it.</td></tr>
+      <tr><td>Credibility percentage on claims</td><td>The reason to trust FOREST over a comment thread. It needs explaining, not removing.</td></tr>
+      <tr><td>Subtitles in several languages</td><td>Makes Hindi and Punjabi speakers first-class, which is a real advantage in India.</td></tr>
+      <tr><td>Friends-only videos and reactions</td><td>Gives people a private way to pull a friend into a debate, with nothing to abuse because there is no free text.</td></tr>
+      <tr><td>BOT labels, 18+ gate, report and block</td><td>Hard rules in CLAUDE.md. They also protect the brand early.</td></tr>
+      <tr><td>Discover with exploration</td><td>It is the anti-echo-chamber promise made concrete. Friends can shape a quarter of a page at most.</td></tr>
+      <tr><td>The editor</td><td>It is the "useful alone" feature. Make it the first thing a new person tries.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin:30px 0 10px">Fix now</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Problem</th><th>What to do</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td class="wrapfirst">Stories row on Home is a placeholder</td><td>Hide it until reposts exist (the spec is in <code>docs/STORIES_SPEC.md</code>), or replace it with a "Today's debate" strip that is real.</td><td><span class="pill cut">Cut for now</span></td></tr>
+      <tr><td class="wrapfirst">Share links open nothing</td><td>A public page per debate with both sides and a preview image for WhatsApp.</td><td><span class="pill next">Next</span></td></tr>
+      <tr><td class="wrapfirst">No notifications</td><td>Push for replies, reactions and new sides on a debate you are in.</td><td><span class="pill next">Next</span></td></tr>
+      <tr><td class="wrapfirst">Account tab is a placeholder</td><td>Profile page (in progress), with a private debate record.</td><td><span class="pill partial">In progress</span></td></tr>
+      <tr><td class="wrapfirst">Credibility % has no explanation</td><td>Tap it to see the claims, the verdict and the sources. Allow "contest this".</td><td><span class="pill next">Next</span></td></tr>
+      <tr><td class="wrapfirst">New accounts start with an empty Home</td><td>Onboarding with topics and five follows, then a first prompt to answer.</td><td><span class="pill next">Next</span></td></tr>
+      <tr><td class="wrapfirst">Back office is minimal</td><td>Queue age, one-tap hide, repeat offenders, and an appeal path. Change the default admin password before any shared deploy.</td><td><span class="pill partial">Partial</span></td></tr>
+      <tr><td class="wrapfirst">Video processing runs one job at a time</td><td>Measure how long one video takes, then size the queue for a campus of a few hundred. A burst of uploads will wait in line.</td><td><span class="pill next">Measure</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin:30px 0 10px">Cut or defer</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Item</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>Stories as reposts</td><td>A nice idea with no urgency. Notifications and public links bring more people sooner.</td></tr>
+      <tr><td>Ranks, streaks and creator payouts</td><td>They must be gated on credibility, and the credibility score is not trusted yet. Building rewards first would pay for low-effort posting, which is the problem the app exists to fix.</td></tr>
+      <tr><td>Music in posts</td><td>Fine for the closed alpha because it uses the person's own file. Before any public launch it needs a licensed library, or it is a copyright problem.</td></tr>
+      <tr><td>Photo posts as a headline feature</td><td>Keep the mode, do not promote it. Video and short text are the debate formats.</td></tr>
+      <tr><td>The database and server rewrite</td><td>CLAUDE.md already says wait. Real users first, migration after.</td></tr>
+      <tr><td>Free-text direct messages, message requests</td><td>Decided against and correct. No text means no harassment through messages, and no request inbox to moderate.</td></tr>
+      <tr><td>Anything for under-18s</td><td>Needs a consent flow and legal advice. Not now.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin:30px 0 10px">Add, ranked by effect on the empty room</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Feature</th><th>Effect</th><th>Effort</th></tr></thead>
+    <tbody>
+      <tr><td>Notifications</td><td>Very high</td><td>Medium</td></tr>
+      <tr><td>Public debate page and share preview</td><td>Very high</td><td>Medium</td></tr>
+      <tr><td>Daily prompt and "reply wanted" queue</td><td>High</td><td>Small</td></tr>
+      <tr><td>Motion rooms for societies</td><td>High</td><td>Medium</td></tr>
+      <tr><td>Onboarding with topics</td><td>High</td><td>Medium</td></tr>
+      <tr><td>Invite flow that creates mutual follows</td><td>High</td><td>Small</td></tr>
+      <tr><td>Hindi and Punjabi in the app, data saver</td><td>Medium to high</td><td>Medium</td></tr>
+      <tr><td>Saved debates, weekly digest</td><td>Medium</td><td>Small</td></tr>
+      <tr><td>Contest an AI verdict</td><td>Medium, builds trust</td><td>Small</td></tr>
+      <tr><td>Export or embed a debate</td><td>Medium, a teacher and journalist channel</td><td>Small</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="playbook">
+  <span class="label">7 · The playbook</span>
+  <h2>How to break the environment problem</h2>
+  <p class="lede">There is no trick. The pattern behind most apps that got through is the same: make a very small place feel full, give people a reason to use it before others arrive, and give them a reason to come back tomorrow.</p>
+
+  <h3 style="margin:28px 0 12px">Fourteen ideas, strongest first</h3>
+  <div class="grid two" id="ideas"></div>
+
+  <h3 style="margin:38px 0 12px">The other environment: tone</h3>
+  <p>A full room can still be a bad room. Structure helps, because arguing FOR or AGAINST is more civil than a free-for-all, but it can also turn into a contest to win. Build the tone on purpose.</p>
+  <div class="grid">
+    <div class="box"><h4>Say the rule once, where people see it</h4><p>"Argue with the claim, not the person." On the reply screen, in one line, not in a policy page.</p></div>
+    <div class="box"><h4>Offer a steelman prompt</h4><p>Before replying, an optional "say their point in one sentence". People who do it argue better, and the other person feels heard.</p></div>
+    <div class="box"><h4>Weight visibility by credibility</h4><p>Posts with sound claims travel further than posts with loud ones. This is already the stated rule for rewards.</p></div>
+    <div class="box"><h4>Slow down new accounts</h4><p>Fewer replies per hour at first, a short wait before replying to strangers, and faster review of anything reported from a new account.</p></div>
+    <div class="box"><h4>Close the report loop quickly</h4><p>A person who reports and sees it handled in a day trusts the room. Show the outcome to the reporter.</p></div>
+    <div class="box"><h4>Let people mute a topic</h4><p>Political exhaustion is real. A mute control keeps heavy users from quitting entirely.</p></div>
+  </div>
+
+  <h3 style="margin:38px 0 12px">A ninety-day plan for one campus</h3>
+  <div class="timeline">
+    <div class="box"><span class="label">Weeks 0 to 2 · Make it ready</span><p>Notifications, public debate pages, onboarding, analytics events, Play internal testing, a real-phone speed pass. Interview ten people.</p></div>
+    <div class="box"><span class="label">Weeks 3 to 4 · Seed</span><p>Forty founding members from friends and two societies. Three prompts. A small group of real volunteers who commit to answer new posts within hours.</p></div>
+    <div class="box"><span class="label">Weeks 5 to 8 · Make it dense</span><p>Motion rooms with societies, one live debate a week, the reply-wanted queue, invite flow. Watch the numbers weekly.</p></div>
+    <div class="box"><span class="label">Weeks 9 to 12 · Prove it</span><p>Decide with data. Open a second campus only if the gate below is met. If it is not, fix the product before spending more on people.</p></div>
+  </div>
+
+  <h3 style="margin:34px 0 10px">What to measure</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Measure</th><th>What it tells you</th><th>Starting threshold (a guess, set your own)</th></tr></thead>
+    <tbody>
+      <tr><td>Posts answered within 24 hours</td><td>Whether the room is alive</td><td>At least 60% of new posts</td></tr>
+      <tr><td>New people who watch five videos and take a side in session one</td><td>Whether onboarding works</td><td>At least 50%</td></tr>
+      <tr><td>New people who reply within 48 hours</td><td>Whether they become creators</td><td>At least 25%</td></tr>
+      <tr><td>Day-7 return</td><td>Whether there is a habit</td><td>At least 20%</td></tr>
+      <tr><td>Replies per active person per week</td><td>Depth of use</td><td>At least 2</td></tr>
+      <tr><td>Median time to first reply</td><td>The experience of posting</td><td>Under 6 hours</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout" style="margin-top:16px">
+    <p><b>Gate and kill rule.</b> After eight weeks with at least 150 active students, if fewer than 30% of posts are answered within a day and day-7 return is below 15%, the network is not the only problem. Stop recruiting and change the product, for example towards a tool for debate societies and classrooms. These numbers are starting guesses; agree your own before the pilot so the result cannot be argued with afterwards.</p>
+  </div>
+</section>
+
+<section id="roadmap">
+  <span class="label">8 · What to build next</span>
+  <h2>A sequence you can start on Monday</h2>
+  <div class="timeline">
+    <div class="box"><span class="label">Now · 2 weeks</span><ul><li>Hide the stories placeholder</li><li>Push notifications</li><li>Public debate page with preview</li><li>Analytics events and a founders' page</li><li>Real-phone speed and per-video processing time</li><li>Ten interviews</li></ul></div>
+    <div class="box"><span class="label">Next · 6 weeks</span><ul><li>Onboarding with topics and follows</li><li>Daily prompt, reply-wanted queue</li><li>Profile page and private debate record</li><li>Invite flow with mutual follows</li><li>Credibility explainer and contest button</li><li>Hindi and Punjabi in the app, data saver</li></ul></div>
+    <div class="box"><span class="label">Later · 3 months</span><ul><li>Motion rooms for societies and classes</li><li>Weekly digest and saved debates</li><li>Export or embed a debate</li><li>Creator programme with credibility-gated payouts</li><li>Server and database migration, once there are users</li><li>iOS</li></ul></div>
+  </div>
+</section>
+
+<section id="risks">
+  <span class="label">9 · Risks</span>
+  <h2>What could hurt us</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Risk</th><th>Why it matters</th><th>What reduces it</th></tr></thead>
+    <tbody>
+      <tr><td class="wrapfirst">Empty room</td><td>Replies unanswered, people leave.</td><td>One campus, motion rooms, reply guarantee, notifications.</td></tr>
+      <tr><td class="wrapfirst">Wrong AI verdict in public</td><td>A bad FOR or AGAINST label or fact-check on a named person is a reputation and legal risk, and it ends trust in the score.</td><td>Label everything as AI, show sources, allow contesting, keep a human in the loop for reported items.</td></tr>
+      <tr><td class="wrapfirst">Harassment and coordinated pushing</td><td>Political topics attract it. One bad week can define the brand.</td><td>The tone measures above, strikes, rate limits, fast review.</td></tr>
+      <tr><td class="wrapfirst">Data protection and minors</td><td>The data protection law sets duties for personal data and a stricter regime for under-18s. Sign-up uses e-mail addresses and dates of birth.</td><td>Keep 18+. Keep deletion working. Get a lawyer to review before a public launch.</td></tr>
+      <tr><td class="wrapfirst">Election and political content rules</td><td>Rules tighten around elections, and platforms can be asked to act quickly.</td><td>A named grievance contact (exists), a documented takedown process, an election-period plan.</td></tr>
+      <tr><td class="wrapfirst">Music and clip copyright</td><td>Posts can carry music the person does not own.</td><td>Own-file only for the alpha. Licensed library or no music before launch.</td></tr>
+      <tr><td class="wrapfirst">Cost per video</td><td>Gemini calls, storage and video delivery grow with every post, and we have no per-video cost figure yet.</td><td>Measure cost per post now. Short length limits. Move storage to a CDN when the numbers say so.</td></tr>
+      <tr><td class="wrapfirst">Single server process</td><td>One process holds the database in memory and handles one request at a time. Fine for hundreds of people, not for thousands.</td><td>It is documented in <code>docs/perf.md</code>. Plan the move before the open-campus phase, not during it.</td></tr>
+      <tr><td class="wrapfirst">Two people</td><td>If one is unavailable, shipping slows. The profile page already depends on a third person.</td><td>Keep the docs current (they are), and ask campus volunteers to take on moderation and content, not code.</td></tr>
+      <tr><td class="wrapfirst">The name</td><td>"FOREST" is a working name. Changing it after launch costs more than before.</td><td>Decide before the first public store listing.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="validate">
+  <span class="label">10 · Before building more</span>
+  <h2>Talk to ten people first</h2>
+  <p>Two weeks of interviews will change the order of this report. Ten people is enough to hear the same thing three times.</p>
+  <div class="grid two">
+    <div class="box"><h4>Who</h4><ul><li>Three college students, different years</li><li>Two people looking for work</li><li>Two society or club leads</li><li>One lecturer</li><li>One Punjabi or Hindi first-language user</li><li>One working professional who reads politics</li></ul></div>
+    <div class="box"><h4>Ask about the past, not the future</h4><ul><li>When did you last argue about something that mattered, and where?</li><li>What made you stop, or never start?</li><li>Last time you posted an opinion online, what happened next?</li><li>Show the app for five minutes and say nothing. Where do they get stuck?</li><li>What would make you send it to one friend?</li></ul></div>
+    <div class="box"><h4>Three cheap experiments</h4><ul><li><b>Manual motion.</b> Run one debate in a WhatsApp group, collect videos by hand, post them to FOREST. See who answers.</li><li><b>Fake door.</b> Share a public page for a debate before the real one exists and count who taps "join".</li><li><b>Reply guarantee.</b> For one week answer every new post within hours. See whether people come back.</li></ul></div>
+    <div class="box"><h4>What would change the plan</h4><ul><li>Nobody wants to be on video: lead with voice and text.</li><li>Students will not post politics under their own name: add topic spaces that are not political first.</li><li>Societies are keen: build motion rooms before onboarding.</li><li>Job-seekers want recognition: start the credibility record earlier.</li></ul></div>
+  </div>
+</section>
+
+<section id="decisions">
+  <span class="label">11 · For the two of you</span>
+  <h2>Decisions that are yours</h2>
+  <ol>
+    <li><b>Which one campus first, and which one recurring use.</b> Placements, exams, campus elections and society motions are all plausible. Pick one for the pilot.</li>
+    <li><b>Age policy.</b> Stay 18+ through the beta, or invest in a parental-consent flow. I recommend staying 18+.</li>
+    <li><b>Stories.</b> Hide the placeholder now and decide on reposts later, or build them. I recommend hiding.</li>
+    <li><b>Seed accounts.</b> Labelled bots are allowed by your rules. How many, for how long, and who are the real volunteers who will answer people?</li>
+    <li><b>Creator money.</b> The README plans a paid creator programme. Start it before or after credibility is trusted? I recommend after.</li>
+    <li><b>Public pages.</b> Are public debate pages indexable by search engines, or only reachable by link? It affects growth and privacy.</li>
+    <li><b>Name.</b> Keep FOREST or change it before the first store listing.</li>
+    <li><b>What counts as success after 90 days.</b> Write the numbers down now.</li>
+  </ol>
+  <footer>
+    <p>Sources: <code>README.md</code>, <code>CLAUDE.md</code>, <code>docs/PHASE1_HOME_PLAN.md</code>, <code>docs/STORIES_SPEC.md</code>, <code>docs/DISCOVER_PLAN.md</code>, <code>docs/api.md</code>, <code>docs/perf.md</code> and the code as of 20 October 2026. Comparisons with other products are general knowledge and should be checked before they are quoted. No user research has been done yet, so every persona and story is a hypothesis.</p>
+  </footer>
+</section>
+</main>
+</div>
+
+<script>
+/* ---------- user story cards ---------- */
+var EPICS = {
+  A: 'Join and onboarding', B: 'Watch and discover', C: 'Create and reply', D: 'Trust and evidence',
+  E: 'Friends and messages', F: 'Safety and moderation', G: 'Growth and distribution', H: 'Founders and operations', P: 'Special audiences'
+};
+var STORIES = [
+  ['A1','A','Aarav','sign up with my e-mail and a username','I can join in under a minute','M','built',['Code arrives in my inbox','Under 18 is refused with a clear reason','I can delete my account later']],
+  ['A2','A','Aarav','pick a few topics I care about when I join','my first screen is something I want to watch, not random','M','next',['Three to seven topics chosen','Discover and Home reflect them at once','I can change them in Settings']],
+  ['A3','A','Aarav','see people worth following on an empty Home','I am never looking at a blank screen','S','built',['Up to ten suggestions','Follow in one tap','Bot accounts show a BOT label']],
+  ['A4','A','Aarav','be asked to answer one prompt right after I join','I do something in the first session, not just look','S','next',['One short prompt, text or video','My first reply is seen by at least one person within a day']],
+  ['A5','A','Meera','verify that I am a student of my college','my society members know the room is real people from our campus','C','later',['College email or ID check','A campus badge, never required to watch']],
+  ['B1','B','Aarav','browse a grid of videos picked for me','I find something worth opening in seconds','M','built',['Tiles in mixed sizes that fit my screen','Pull to refresh, more loads as I scroll','BOT label on automated accounts']],
+  ['B2','B','Kabir','swipe between the FOR and AGAINST replies to a video','I see both sides without leaving the screen','M','built',['Swipe left for FOR, right for AGAINST','A "parent video" button takes me back','Counts shown for each side']],
+  ['B3','B','Kabir','open the debate tree','I can follow a whole argument and who answered whom','S','built',['Every reply drawn with its side','Tap a node to watch it']],
+  ['B4','B','Kabir','search posts and people','I find the topic I came for','S','built',['Words from titles, captions and what is said','Tabs for all, accounts and posts','Nothing from blocked people']],
+  ['B5','B','Harpreet','watch with subtitles in my language','I understand a video I cannot hear well','M','partial',['Subtitles in several languages (built)','The app itself in Hindi and Punjabi (not built)']],
+  ['B6','B','Harpreet','use a data-saver mode','videos do not eat my mobile data','S','next',['Lower quality and no preloading when on','Shows how much I saved']],
+  ['B7','B','Kabir','save a debate to read later','I can come back when I have time','S','next',['A save button on a video','A list under my profile']],
+  ['B8','B','Kabir','get a weekly digest of the best arguments on topics I follow','I stay informed in three minutes','C','later',['One message a week','Both sides of each topic','Easy to turn off']],
+  ['B9','B','Rohan','see "you are caught up" and a daily time summary','I leave feeling better, not drained','C','later',['End-of-feed message','Optional daily limit']],
+  ['C1','C','Aarav','record a video reply and post it','I can answer someone with my own voice and face','M','built',['Record or pick a video','Shows as processing, then ready','I can retry a failed one']],
+  ['C2','C','Aarav','trim, crop, add text and pick a cover before posting','my reply looks good and says what I mean','S','built',['Preview matches what is posted','Hindi, Punjabi and emoji text draw correctly']],
+  ['C3','C','Aarav','write a short text reply instead','I can join in when I cannot record','M','built',['Up to 280 characters','Gets a FOR or AGAINST label like a video']],
+  ['C4','C','Harpreet','post a voice-only reply','I can speak without being on camera','S','later',['Audio with captions','Clearly marked as audio']],
+  ['C5','C','Rohan','get a daily question to answer','I have a routine and something to say','M','next',['One prompt a day','Answers collected under it','A bot-written prompt is labelled']],
+  ['C6','C','Aarav','see which posts have no reply yet and answer one','new people are not left talking to nobody','M','next',['A reply-wanted list','New people get a first reply within a day']],
+  ['C7','C','Simran','practise a group discussion topic privately first','I can improve before I post in public','C','later',['Record and get the AI label and feedback','Nothing is shared unless I choose']],
+  ['D1','D','Kabir','see why a claim got its credibility score','I can judge the verdict myself','M','next',['Tap the percentage to see claims, verdict and sources','Plain-language reason']],
+  ['D2','D','Dr. Verma','contest an AI label or verdict','a mistake about me or my claim can be fixed','S','next',['A contest button with a short reason','A human decision within a set time']],
+  ['D3','D','Rohan','build a credibility record over time','I have something real to show','S','later',['A per-person score from verified claims','Private by default, shareable by choice','Never based on views or likes alone']],
+  ['D4','D','Dr. Verma','export or embed a debate','I can cite it in class or an article','C','later',['A link, an image and an embed','Shows the tree and the scores']],
+  ['E1','E','Aarav','follow people and see their replies on Home','I keep up with the people I trust','M','built',['Follow and unfollow in one tap','Home shows posts and replies from them']],
+  ['E2','E','Aarav','send a video to a friend','I can pull them into a debate','M','built',['Only friends who follow me back','Appears in their messages','No text, no strangers']],
+  ['E3','E','Aarav','react to a video I was sent with an emoji','I can answer quickly without typing','M','built',['Six emojis','The sender is told','I can take it back']],
+  ['E4','E','Aarav','be told when someone replies or reacts','I come back when it matters','M','next',['Push notification','Opens the right video','I can switch each kind off']],
+  ['E5','E','Aarav','challenge a friend to a debate on a topic','we can argue with a record of who said what','S','next',['Send a prompt video, friend replies','Both sides land in one debate']],
+  ['E6','E','Aarav','have a profile that shows who I am','people know who they are answering','M','partial',['Picture, bio, posts','Another person is building this page']],
+  ['F1','F','Vikram','be stopped when I post abuse','the room stays usable for everyone else','M','partial',['Word list and strikes exist','Faster hide and a check on new accounts needed']],
+  ['F2','F','Aarav','report a post and block a person','I can protect myself in two taps','M','built',['Five fixed reasons','Blocked people cannot see or message me']],
+  ['F3','F','Moderator','review reports newest first and hide in one tap','a bad post is gone within hours','M','partial',['Back office exists','Queue age and repeat offenders to add']],
+  ['F4','F','Aarav','appeal a takedown','a wrong decision can be reversed','S','later',['Written appeal','A second person reviews']],
+  ['G1','G','Aarav','share a debate to WhatsApp and have it open without the app','my friends can join with one tap','M','next',['A public page with a preview image','"Open in app" if installed','Works without an account to watch']],
+  ['G2','G','Aarav','invite friends and follow each other at once','messaging and reactions work with them straight away','S','next',['A personal invite link','Both sides get a mutual follow','No contact upload required']],
+  ['G3','G','Meera','create a motion room for my society with one link','my members debate in one place over one evening','M','later',['Set a motion and a window','Shows the best arguments on each side','Organiser sees who took part']],
+  ['G4','G','Rohan','earn from my debates when they are sound','my time is rewarded for quality','C','later',['Payout depends on credibility','Never on raw views','Clear rules published']],
+  ['H1','H','Founder','see active people, answered posts and report queue age on one page','I know whether the pilot is working','M','next',['Daily and weekly numbers','Updates without a deploy']],
+  ['H2','H','Founder','see what each video costs us','pricing and limits are based on fact','S','next',['Gemini calls per video','Storage per video']],
+  ['H3','H','Founder','rotate seed accounts out as real users arrive','the app is not run by bots','S','partial',['BOT labels are always shown (built)','A rule for retiring seed content (not built)']],
+  ['P1','P','Ananya','use a version made for under-18s','I can join before I am eighteen','C','later',['Needs parental consent and legal advice','Out of scope until then']],
+  ['P2','P','Ananya','be reminded to take part when I turn 18 before an election','my first vote is an informed one','C','later',['Age-aware prompt','Election-period plan exists first']]
+];
+var STATUS_LABEL = { built: 'Built', partial: 'Partial', next: 'Next', later: 'Later' };
+var PRIO_LABEL = { M: 'Must', S: 'Should', C: 'Could' };
+var state = { status: 'all', epic: 'all' };
+
+function el(tag, attrs, kids) {
+  var n = document.createElement(tag);
+  if (attrs) Object.keys(attrs).forEach(function (k) {
+    if (k === 'text') n.textContent = attrs[k]; else if (k === 'html') n.innerHTML = attrs[k]; else n.setAttribute(k, attrs[k]);
+  });
+  (kids || []).forEach(function (c) { n.appendChild(c); });
+  return n;
+}
+function renderStories() {
+  var grid = document.getElementById('storyGrid');
+  grid.textContent = '';
+  var shown = 0;
+  STORIES.forEach(function (s) {
+    if (state.status !== 'all' && s[6] !== state.status) return;
+    if (state.epic !== 'all' && s[1] !== state.epic) return;
+    shown++;
+    var acc = el('ul', null, s[7].map(function (a) { return el('li', { text: a }); }));
+    var card = el('article', { 'class': 'story' }, [
+      el('div', { 'class': 'row' }, [
+        el('span', { 'class': 'id', text: s[0] }),
+        el('span', { 'class': 'pill ' + s[6], text: STATUS_LABEL[s[6]] }),
+        el('span', { 'class': 'prio', text: PRIO_LABEL[s[5]] })
+      ]),
+      el('p', { html: 'As <b></b>, I want to ' }),
+      acc,
+      el('div', { 'class': 'who', text: EPICS[s[1]] })
+    ]);
+    var p = card.querySelector('p');
+    p.querySelector('b').textContent = s[2];
+    p.appendChild(document.createTextNode(s[3] + ', so that ' + s[4] + '.'));
+    grid.appendChild(card);
+  });
+  document.getElementById('storyCount').textContent = shown + ' of ' + STORIES.length + ' cards';
+}
+(function initFilters() {
+  var host = document.getElementById('statusFilters');
+  host.appendChild(el('span', { 'class': 'label', text: 'Status' }));
+  [['all', 'All'], ['built', 'Built'], ['partial', 'Partial'], ['next', 'Next'], ['later', 'Later']].forEach(function (pair) {
+    var b = el('button', { 'class': 'chip', type: 'button', 'aria-pressed': pair[0] === 'all' ? 'true' : 'false', text: pair[1] });
+    b.addEventListener('click', function () {
+      state.status = pair[0];
+      host.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b ? 'true' : 'false'); });
+      renderStories();
+    });
+    host.appendChild(b);
+  });
+  var sel = document.getElementById('epicFilter');
+  sel.appendChild(el('option', { value: 'all', text: 'All areas' }));
+  Object.keys(EPICS).forEach(function (k) { sel.appendChild(el('option', { value: k, text: EPICS[k] })); });
+  sel.addEventListener('change', function () { state.epic = sel.value; renderStories(); });
+  renderStories();
+})();
+
+/* ---------- the fourteen ideas ---------- */
+var IDEAS = [
+  ['One campus, one cohort', 'A small dense room feels alive and a large thin one feels dead. Count a campus as "dense" only when most new posts get answered within a day, and open the next campus after that.', 'Free', 'Needs discipline: saying no to a second campus.', 'Pick the campus and the 40 founding members this week.'],
+  ['Motion rooms for societies and classes', 'One organiser brings dozens of people on one evening, with a reason to be there and a deadline. It is the fastest way to a full room.', 'Medium build', 'Needs organiser controls so it does not turn into noise.', 'Run the first motion by hand with one society before building anything.'],
+  ['Public debate page with a link preview', 'WhatsApp is how a campus spreads anything. A link that works without installing turns every share into a trial.', 'Medium build', 'People may watch and never join, so add a clear "answer this" button.', 'Page for one debate: both sides, preview image, open-in-app button.'],
+  ['Notifications that matter', 'A reply is the reward for posting. If nobody is told, nobody comes back.', 'Medium build', 'Too many buzzes teach people to turn them off. Start with replies and reactions only.', 'Push for "someone replied" and "someone reacted".'],
+  ['A daily prompt', 'Gives every person something to answer, makes the feed fresh daily, and builds the habit. The forest_daily idea already exists in the sample data.', 'Small build', 'A bot-written prompt must be labelled. Pick questions that are not only political.', 'One question a day for two weeks, written by you.'],
+  ['Reply wanted queue', 'New posts that have no reply are shown first to people who like that topic. Nobody posts into silence.', 'Small build', 'Can feel like chores. Keep it as a suggestion, not a requirement.', 'A strip at the top of Discover: "These are waiting for an answer".'],
+  ['A first-reply guarantee with real people', 'In the first month ten real volunteers commit to answering every new post within hours. This is not bots pretending to be people. Labelled bots stay seeds only.', 'Free', 'Burns out volunteers. Rotate and cap it to the first weeks.', 'Recruit ten and give each a topic.'],
+  ['Be useful alone', 'Make the first minute useful with no network. The editor, automatic subtitles and the AI label on your own take are good enough to share on their own.', 'Small build', 'Needs a clear "made on FOREST" mark so it spreads without being pushy.', 'Let a new person record a take, see its label and subtitles, and share it, before following anyone.'],
+  ['Invites that create friendships', 'Messages and reactions need mutual follows, so an invite link that follows both ways makes the social features work from day one.', 'Small build', 'Do not pull in contacts. A link is enough.', 'Personal invite link with a mutual follow on accept.'],
+  ['A waitlist that unlocks by campus', 'A campus opens when enough verified students sign up. It creates social proof and keeps people from joining an empty room.', 'Medium build', 'Needs student verification, which is its own piece of work.', 'A simple page that counts sign-ups per college, with no verification at first.'],
+  ['Creators and debaters you recruit', 'Ten to twenty people who already argue well bring their own audience and set the tone. Pay in goods or recognition first, money later and tied to credibility.', 'Cost and effort', 'Must follow CLAUDE.md: their own files only, no scraping.', 'Ask each society for two members.'],
+  ['Bridges to other apps', 'Let someone post the same take to Instagram or WhatsApp status with a "reply on FOREST" link. That is the reverse of the usual direction: we use their audience.', 'Small build', 'Do not make it look like spam.', 'A share sheet with a watermark and a link.'],
+  ['Habit loops that reward quality', 'A weekly recap of your debate, streaks that need a sound post (not just a post), and a "come back, three people answered you" message.', 'Small build', 'Streaks must never reward volume. Credibility gating is a hard rule here.', 'Weekly recap message after notifications ship.'],
+  ['Events on the calendar', 'Placement season, exam results, college fests and campus elections all give a reason to open the app this week.', 'Free', 'Misses are visible. Plan only the events you can run.', 'List the next six events at your campus and pick two.']
+];
+(function renderIdeas() {
+  var host = document.getElementById('ideas');
+  IDEAS.forEach(function (x, i) {
+    var facts = el('div', { 'class': 'facts' }, [el('span', { 'class': 'pill plain', text: x[2] })]);
+    host.appendChild(el('article', { 'class': 'box idea' }, [
+      el('span', { 'class': 'n', text: String(i + 1).padStart(2, '0') }),
+      el('h4', { text: x[0] }),
+      el('p', { text: x[1] }),
+      facts,
+      el('p', { html: '<b>Watch out:</b> ' }),
+      el('p', { html: '<b>First step:</b> ' })
+    ]));
+    var ps = host.lastChild.querySelectorAll('p');
+    ps[1].appendChild(document.createTextNode(x[3]));
+    ps[2].appendChild(document.createTextNode(x[4]));
+  });
+})();
+
+/* ---------- use-case diagrams ---------- */
+var NS = 'http://www.w3.org/2000/svg';
+function s(tag, attrs, parent) {
+  var n = document.createElementNS(NS, tag);
+  Object.keys(attrs || {}).forEach(function (k) { n.setAttribute(k, attrs[k]); });
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function lines(text, max) {
+  var words = text.split(' '), out = [], cur = '';
+  words.forEach(function (w) {
+    if ((cur + ' ' + w).trim().length > max && cur) { out.push(cur); cur = w; } else { cur = (cur + ' ' + w).trim(); }
+  });
+  if (cur) out.push(cur);
+  return out;
+}
+function edge(c, rx, ry, p) { // point on the ellipse around c, in the direction of p
+  var dx = p.x - c.x, dy = p.y - c.y;
+  var k = 1 / Math.sqrt((dx / rx) * (dx / rx) + (dy / ry) * (dy / ry));
+  return { x: c.x + dx * k, y: c.y + dy * k };
+}
+function drawUC(spec) {
+  var W = 900, rowH = 82, top = 52, rows = Math.ceil(spec.cases.length / 2);
+  var H = top + rows * rowH + 26, boxX = 190, boxW = 520, rx = 128, ry = 29;
+  var wrap = el('div', { 'class': 'diagram' }, [
+    el('h3', { text: spec.title }), el('p', { 'class': 'cap', text: spec.caption }), el('div', { 'class': 'scroll' })
+  ]);
+  var svg = s('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': spec.title + ' use-case diagram' });
+  wrap.querySelector('.scroll').appendChild(svg);
+  s('rect', { 'class': 'boundary', x: boxX, y: 14, width: boxW, height: H - 28, rx: 12 }, svg);
+  var bt = s('text', { 'class': 'btitle', x: boxX + 16, y: 36 }, svg); bt.textContent = spec.system || 'FOREST app';
+
+  var pos = {}, cx = [boxX + 150, boxX + boxW - 150];
+  spec.cases.forEach(function (c, i) { pos[c.id] = { x: cx[i % 2], y: top + 40 + Math.floor(i / 2) * rowH }; });
+  var apos = {};
+  function place(list, x) {
+    list.forEach(function (a, i) { apos[a.id] = { x: x, y: top + 20 + (rows * rowH) * (i + 1) / (list.length + 1) }; });
+  }
+  place(spec.left || [], 84); place(spec.right || [], W - 84);
+
+  (spec.links || []).forEach(function (l) {
+    var a = apos[l[0]], c = pos[l[1]]; if (!a || !c) return;
+    var e = edge(c, rx, ry, a);
+    s('line', { 'class': 'link', x1: a.x + (a.x < W / 2 ? 14 : -14), y1: a.y - 14, x2: e.x, y2: e.y }, svg);
+  });
+  var arrow = s('defs', {}, svg);
+  var mk = s('marker', { id: 'ar' + spec.id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, arrow);
+  s('path', { d: 'M0 0 L10 5 L0 10 z', fill: 'var(--ink2)' }, mk);
+  (spec.rel || []).forEach(function (r) {
+    var a = pos[r[0]], b = pos[r[1]]; if (!a || !b) return;
+    var p1 = edge(a, rx, ry, b), p2 = edge(b, rx, ry, a);
+    s('line', { 'class': 'rel', x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, 'marker-end': 'url(#ar' + spec.id + ')' }, svg);
+    var t = s('text', { 'class': 'relt', x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 - 5 }, svg); t.textContent = '«' + r[2] + '»';
+  });
+  spec.cases.forEach(function (c) {
+    var p = pos[c.id];
+    s('ellipse', { 'class': 'uc' + (c.planned ? ' planned' : '') + (c.external ? ' external' : ''), cx: p.x, cy: p.y, rx: rx, ry: ry }, svg);
+    var ls = lines(c.label, 25);
+    var t = s('text', { 'class': 'uct', x: p.x, y: p.y - (ls.length - 1) * 7 + 4 }, svg);
+    ls.forEach(function (ln, i) { var sp = s('tspan', { x: p.x, dy: i ? 14 : 0 }, t); sp.textContent = ln; });
+  });
+  (spec.left || []).concat(spec.right || []).forEach(function (a) {
+    var p = apos[a.id];
+    s('circle', { 'class': 'actor', cx: p.x, cy: p.y - 28, r: 9 }, svg);
+    s('line', { 'class': 'actor', x1: p.x, y1: p.y - 19, x2: p.x, y2: p.y + 6 }, svg);
+    s('line', { 'class': 'actor', x1: p.x - 14, y1: p.y - 10, x2: p.x + 14, y2: p.y - 10 }, svg);
+    s('line', { 'class': 'actor', x1: p.x, y1: p.y + 6, x2: p.x - 11, y2: p.y + 24 }, svg);
+    s('line', { 'class': 'actor', x1: p.x, y1: p.y + 6, x2: p.x + 11, y2: p.y + 24 }, svg);
+    lines(a.label, 14).forEach(function (ln, i) { var t = s('text', { 'class': 'actort', x: p.x, y: p.y + 42 + i * 14 }, svg); t.textContent = ln; });
+  });
+  return wrap;
+}
+var DIAGRAMS = [
+  { id: 'all', title: 'The whole system', caption: 'Everyone who touches FOREST and the main things they do. The AI pipeline is an actor too, because it does work the people never see.',
+    left: [{ id: 'viewer', label: 'Viewer' }, { id: 'creator', label: 'Creator' }], right: [{ id: 'mod', label: 'Moderator' }, { id: 'ai', label: 'Gemini and ffmpeg' }],
+    cases: [
+      { id: 'login', label: 'Sign up and log in' }, { id: 'browse', label: 'Browse and search' },
+      { id: 'watch', label: 'Watch a debate, switch FOR and AGAINST' }, { id: 'tree', label: 'Open the debate tree' },
+      { id: 'reply', label: 'Record or write a reply' }, { id: 'send', label: 'Send a video to a friend and react' },
+      { id: 'report', label: 'Report or block' }, { id: 'review', label: 'Review reports, hide or restore' },
+      { id: 'analyse', label: 'Transcribe, label stance, check claims' }, { id: 'notify', label: 'Get notified of replies', planned: true },
+      { id: 'share', label: 'Share a debate link outside the app', planned: true }, { id: 'motion', label: 'Join a motion room', planned: true }
+    ],
+    links: [['viewer', 'login'], ['viewer', 'browse'], ['viewer', 'watch'], ['viewer', 'tree'], ['viewer', 'send'], ['viewer', 'report'], ['viewer', 'notify'], ['viewer', 'share'], ['creator', 'login'], ['creator', 'reply'], ['creator', 'motion'], ['mod', 'review'], ['ai', 'analyse']],
+    rel: [['reply', 'analyse', 'include'], ['report', 'watch', 'extend']] },
+  { id: 'viewer', title: 'Viewer', caption: 'A person who mostly watches. They are the largest group and the audience every reply needs.',
+    left: [{ id: 'viewer', label: 'Viewer' }], right: [{ id: 'friend', label: 'Friend' }],
+    cases: [
+      { id: 'grid', label: 'Browse the Discover grid' }, { id: 'search', label: 'Search posts and accounts' },
+      { id: 'watch', label: 'Watch a video' }, { id: 'swipe', label: 'Swipe to FOR or AGAINST replies' },
+      { id: 'subs', label: 'Read subtitles in my language' }, { id: 'side', label: 'Take a side on a video' },
+      { id: 'like', label: 'Like and follow' }, { id: 'tree', label: 'Open the debate tree' },
+      { id: 'why', label: 'See why a claim scored what it did', planned: true }, { id: 'save', label: 'Save a debate for later', planned: true }
+    ],
+    links: [['viewer', 'grid'], ['viewer', 'search'], ['viewer', 'watch'], ['viewer', 'swipe'], ['viewer', 'subs'], ['viewer', 'side'], ['viewer', 'like'], ['viewer', 'tree'], ['viewer', 'why'], ['viewer', 'save'], ['friend', 'watch']],
+    rel: [['swipe', 'watch', 'extend'], ['subs', 'watch', 'extend'], ['why', 'tree', 'extend']] },
+  { id: 'creator', title: 'Creator', caption: 'Anyone posting. Posting always includes the AI analysis, and the person sees the result.',
+    left: [{ id: 'creator', label: 'Creator' }], right: [{ id: 'ai', label: 'Gemini and ffmpeg' }],
+    cases: [
+      { id: 'record', label: 'Record or pick a video' }, { id: 'text', label: 'Write a text reply' },
+      { id: 'edit', label: 'Trim, crop, add text, music, cover' }, { id: 'post', label: 'Post a reply' },
+      { id: 'render', label: 'Render the finished video' }, { id: 'analyse', label: 'Transcribe, subtitle, label and fact-check' },
+      { id: 'result', label: 'See my stance label and credibility' }, { id: 'retry', label: 'Retry a failed post' },
+      { id: 'prompt', label: 'Answer a daily prompt', planned: true }, { id: 'delete', label: 'Delete my account and data' }
+    ],
+    links: [['creator', 'record'], ['creator', 'text'], ['creator', 'edit'], ['creator', 'post'], ['creator', 'result'], ['creator', 'retry'], ['creator', 'prompt'], ['creator', 'delete'], ['ai', 'render'], ['ai', 'analyse']],
+    rel: [['post', 'render', 'include'], ['post', 'analyse', 'include'], ['edit', 'record', 'extend']] },
+  { id: 'friends', title: 'Friends and messages', caption: 'Only people who follow each other can send a video. There is no free text, so reactions are the only reply.',
+    left: [{ id: 'sender', label: 'Friend who sends' }], right: [{ id: 'receiver', label: 'Friend who receives' }],
+    cases: [
+      { id: 'follow', label: 'Follow each other' }, { id: 'send', label: 'Send a video' },
+      { id: 'inbox', label: 'See the inbox with unread marks' }, { id: 'open', label: 'Open a sent video' },
+      { id: 'react', label: 'React with one of six emojis' }, { id: 'told', label: 'Be told about the reaction' },
+      { id: 'block', label: 'Block a person' }, { id: 'push', label: 'Get a push notification', planned: true }
+    ],
+    links: [['sender', 'follow'], ['sender', 'send'], ['sender', 'told'], ['sender', 'block'], ['receiver', 'follow'], ['receiver', 'inbox'], ['receiver', 'open'], ['receiver', 'react'], ['receiver', 'push']],
+    rel: [['send', 'follow', 'include'], ['react', 'open', 'extend']] },
+  { id: 'mod', title: 'Safety and moderation', caption: 'What keeps the room usable. The first half is built; appeals and proactive screening are not.',
+    left: [{ id: 'reporter', label: 'Any person' }, { id: 'complainant', label: 'Complainant' }], right: [{ id: 'mod', label: 'Moderator' }],
+    cases: [
+      { id: 'report', label: 'Report a post with a reason' }, { id: 'block', label: 'Block a person' },
+      { id: 'queue', label: 'Review the report queue' }, { id: 'hide', label: 'Hide or restore a post' },
+      { id: 'strike', label: 'Strike and suspend repeat offenders' }, { id: 'complain', label: 'File a complaint to the grievance contact' },
+      { id: 'resolve', label: 'Resolve the complaint in writing' }, { id: 'appeal', label: 'Appeal a decision', planned: true },
+      { id: 'screen', label: 'Screen for hate and threats at upload', planned: true }, { id: 'age', label: 'Queue age and repeat-offender view', planned: true }
+    ],
+    links: [['reporter', 'report'], ['reporter', 'block'], ['reporter', 'appeal'], ['complainant', 'complain'], ['mod', 'queue'], ['mod', 'hide'], ['mod', 'strike'], ['mod', 'resolve'], ['mod', 'screen'], ['mod', 'age']],
+    rel: [['hide', 'queue', 'include'], ['strike', 'hide', 'extend']] }
+];
+(function renderDiagrams() {
+  var host = document.getElementById('diagrams');
+  DIAGRAMS.forEach(function (d) { host.appendChild(drawUC(d)); });
+})();
+
+/* ---------- contents rail highlights the section in view ---------- */
+(function tocSpy() {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting && map[e.target.id]) {
+        links.forEach(function (a) { a.classList.remove('on'); });
+        map[e.target.id].classList.add('on');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('main section[id]').forEach(function (sec) { io.observe(sec); });
+})();
+</script>
+
+</html>

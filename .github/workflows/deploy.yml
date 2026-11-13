@@ -1,0 +1,66 @@
+name: Deploy to Oracle Cloud VM
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-frontend:
+    name: Deploy Frontend & Node Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.ORACLE_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Sync Frontend Files to Oracle VM
+        run: |
+          rsync -avz --delete Website/frontend/ ubuntu@${{ secrets.ORACLE_HOST }}:/home/ubuntu/frontend/
+
+      - name: Sync Node Backend Files & Restart PM2
+        run: |
+          rsync -avz --exclude 'node_modules' Website/backend/ ubuntu@${{ secrets.ORACLE_HOST }}:/home/ubuntu/backend/
+          ssh ubuntu@${{ secrets.ORACLE_HOST }} "cd /home/ubuntu/backend && npm install --production && pm2 restart forrest-backend || pm2 start server.js --name forrest-backend && pm2 save"
+
+  deploy-springboot:
+    name: Build & Deploy Spring Boot Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Build Spring Boot Fat JAR
+        working-directory: forest/forest_backend
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ORACLE_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.ORACLE_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Transfer JAR to Oracle VM
+        run: |
+          scp forest/forest_backend/target/forest_backend-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.ORACLE_HOST }}:/home/ubuntu/forest_backend.jar
+
+      - name: Restart Spring Boot in PM2
+        run: |
+          ssh ubuntu@${{ secrets.ORACLE_HOST }} "pm2 restart forest-springboot || pm2 start 'java -jar /home/ubuntu/forest_backend.jar' --name forest-springboot && pm2 save"
