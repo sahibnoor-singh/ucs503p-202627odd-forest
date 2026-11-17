@@ -35,13 +35,12 @@ This is our testing phase where we share the app with real people to see if it a
 * We will add an automatic safety filter to block bad language or inappropriate videos.
 
 ### 5. Milestone 4: Final Presentation
-**Status:** Planned
-**Target Date:** March 15, 2027
+**Status:** In progress
 
-This is the final stretch before we submit the project for grading.
-* We will stop adding new features and just fix any remaining bugs.
-* We will write our final report showing all the data we collected from the students during the beta launch.
-* We will present the fully working app to the evaluation panel.
+The final presentation of the project to the evaluation panel.
+* Present the working Flutter app: video feed, debate tree, question of the day and debate rooms.
+* Present the AI pipeline that places each reply as FOR, AGAINST or UNRESOLVED.
+* Submit the report and the team journals.
 
 ### Visual Schedule
 
@@ -63,6 +62,5 @@ gantt
     Safety Filters              :         m3_2, 2027-01-01, 2027-01-30
     
     section Milestone 4
-    Fix Bugs                    :         m4_1, 2027-02-15, 2027-02-28
-    Final Presentation          :         m4_2, 2027-03-01, 2027-03-15
+    Final Presentation          :active,  m4_1, 2026-11-18, 1d
 ```
