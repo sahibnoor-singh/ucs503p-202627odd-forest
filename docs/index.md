@@ -3,38 +3,32 @@
 **UCS503: Software Engineering (Project)**  
 **TIET Patiala**
 
-# The Sum Function in C++
+# FOREST
 
-**Author(s)**:
+**A video-first debate app. People answer an opinion with a video, and an AI maps every reply as FOR, AGAINST or UNRESOLVED, so a debate becomes a tree you can follow instead of a feed you scroll.**
 
-`(RGB)` Raghav B. Venkataramaiyer `<bv.raghav -at-
-thapar -dot- edu>`
+**Author(s)**: Sahibnoor Singh, Yaksh, Ridhima, Jasmine Tiwana (Group 1)
 
-This project creates a sum function in c++ as a sample
-to illustrate how to compile a shared library and
-distribute it for use along with the binary.
+## The app
 
-## Installation
+| Debate tree | Video | Home | Debate rooms |
+|---|---|---|---|
+| ![Debate tree](assets/screenshots/debate-tree.png) | ![Video screen](assets/screenshots/video.png) | ![Home](assets/screenshots/home.png) | ![Debate rooms](assets/screenshots/rooms.png) |
 
-``` shell
-make -C code
-```
+*Screenshots are from the Android app running on demo data. The videos are generated placeholders, and every account shown is an automated demo account, labelled BOT wherever it appears.*
 
-This will create create a folder `dist` in `code`
-folder, with following contents
+## The idea
 
-```
-dist
- +-lib
- |  \-libbvr_math.so
- +-bin
-    \-run
-```
+1. Someone records a short video giving an opinion. That is the root of a debate.
+2. Anyone can reply with a video of their own.
+3. The audio is transcribed by an AI and each reply is placed against what it answers: **FOR**, **AGAINST** or **UNRESOLVED**. The AI reports which side a reply is on. It does not decide who is right.
+4. The claims in a video are given a credibility score.
+5. Everyone can open the tree and reach the opposing side in a tap, which is the opposite of an echo chamber.
 
-## Usage
+## Where to look
 
-``` shell
-cd code
-export LD_LIBRARY_PATH=dist/lib
-./dist/bin/run
-```
+- [Milestones and schedule](MILESTONES.md)
+- [Project selection criteria](criteria-for-project-selection.md)
+- Team journals, in the navigation
+
+The working application is developed privately. This repository holds the academic submission: proposal, feasibility study, schedule, journals and a simplified demonstration of the backend's shape.

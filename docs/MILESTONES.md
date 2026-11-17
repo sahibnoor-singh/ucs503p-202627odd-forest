@@ -15,13 +15,15 @@ In this phase, we focused on getting the core technology to work.
 * We launched a basic testing website where users can upload a transcript and see the graph build live.
 
 ### 3. Milestone 2: Mobile App and Better Graphs
-**Status:** In Progress
+**Status:** Mostly done, in internal testing
 **Target Date:** November 25, 2026
 
 Now that the website works, we need to make it accessible for normal users on their phones.
-* We are building a mobile application using Flutter so users can record videos directly from their cameras.
-* We are improving the graph design so it looks much better and is easier to navigate.
-* We are adding a community voting system. If the AI is confused by sarcasm, real users can vote to decide what the video actually means.
+* We built a mobile application using Flutter. Users sign up with an e-mailed code or Google, record videos from their camera, and reply to each other with video.
+* The debate tree shows an opinion and all of its replies on one screen, coloured FOR or AGAINST, with a credibility score on each.
+* We added a question of the day, a list of opinions still waiting for a first reply, and debate rooms where a society or class argues one motion.
+* Automated demo accounts are always labelled BOT in the app.
+* Still to do: a community vote for replies the AI cannot place, for example sarcasm.
 
 ### 4. Milestone 3: Beta Launch
 **Status:** Planned
@@ -53,8 +55,8 @@ gantt
     Website and AI Testing      :done,    m1_2, 2026-08-20, 2026-09-18
     
     section Milestone 2
-    Flutter Mobile App          :active,  m2_1, 2026-09-20, 2026-10-30
-    Graph Design Updates        :         m2_2, 2026-10-15, 2026-11-25
+    Flutter Mobile App          :done,    m2_1, 2026-09-20, 2026-10-30
+    Graph Design Updates        :active,  m2_2, 2026-10-15, 2026-11-25
     
     section Milestone 3
     Student Beta Launch         :         m3_1, 2026-12-01, 2027-01-15
