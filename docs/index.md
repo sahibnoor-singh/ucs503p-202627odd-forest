@@ -5,25 +5,29 @@
 
 # FOREST
 
-**A video-first debate app. People answer an opinion with a video, and an AI maps every reply as FOR, AGAINST or UNRESOLVED, so a debate becomes a tree you can follow instead of a feed you scroll.**
+A video-first debate app. Someone posts a short video opinion, others answer with videos of their own, and an AI marks each reply as FOR, AGAINST or UNRESOLVED. A debate becomes a tree you can follow from the first opinion to the last reply.
 
 **Author(s)**: Sahibnoor Singh, Yaksh, Ridhima, Jasmine Tiwana (Group 1)
 
 ## The app
 
-| Debate tree | Video | Home | Debate rooms |
+| Debate tree | Video | Home | Discover |
 |---|---|---|---|
-| ![Debate tree](assets/screenshots/debate-tree.png) | ![Video screen](assets/screenshots/video.png) | ![Home](assets/screenshots/home.png) | ![Debate rooms](assets/screenshots/rooms.png) |
+| ![Debate tree](assets/screenshots/debate-tree.png) | ![Video screen](assets/screenshots/video.png) | ![Home](assets/screenshots/home.png) | ![Discover](assets/screenshots/discover.png) |
 
-*Screenshots are from the Android app running on demo data. The videos are generated placeholders, and every account shown is an automated demo account, labelled BOT wherever it appears.*
+| Question of the day | Debate room | Profile | Create |
+|---|---|---|---|
+| ![Question of the day](assets/screenshots/question-of-the-day.png) | ![Debate room](assets/screenshots/debate-room.png) | ![Profile](assets/screenshots/profile.png) | ![Create](assets/screenshots/create.png) |
+
+*Screenshots are from the Android app running on demo data. The accounts shown are automated demo accounts and are labelled BOT wherever they appear.*
 
 ## The idea
 
 1. Someone records a short video giving an opinion. That is the root of a debate.
 2. Anyone can reply with a video of their own.
-3. The audio is transcribed by an AI and each reply is placed against what it answers: **FOR**, **AGAINST** or **UNRESOLVED**. The AI reports which side a reply is on. It does not decide who is right.
+3. The audio is transcribed by an AI and each reply is placed against what it answers: **FOR**, **AGAINST** or **UNRESOLVED**. The AI says which side a reply is on. It does not decide who is right.
 4. The claims in a video are given a credibility score.
-5. Everyone can open the tree and reach the opposing side in a tap, which is the opposite of an echo chamber.
+5. Anyone can open the tree and go straight to the opposing side.
 
 ## Where to look
 
