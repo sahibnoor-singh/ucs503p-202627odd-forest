@@ -31,6 +31,9 @@ A video-first debate app. Someone posts a short video opinion, others answer wit
 
 ## Where to look
 
+- [Final report (PDF)](../project-report-final/FOREST_Final_Report.pdf)
+- [Design and analysis models](DESIGN.md)
+- [Working web app](https://api.forestapp.in/app/) and [project website](https://forestapp.in/project)
 - [Milestones and schedule](MILESTONES.md)
 - [Project selection criteria](criteria-for-project-selection.md)
 - Team journals, in the navigation
